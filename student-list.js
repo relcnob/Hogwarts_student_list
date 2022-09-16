@@ -5,10 +5,19 @@ const bloodJson = "";
 const studentArray = [];
 let lastNameArr;
 let duplicateLastNameArr;
+let filterProperty;
+let filterValue;
+let sortProperty;
 // init function on DOMContentLoaded
 document.addEventListener("DOMContentLoaded", init);
 function init() {
   loadJSON(jsonList, handleData);
+  document.querySelector("p").addEventListener("click", () => {
+    sortByProperty("firstName");
+  });
+  document.querySelector("p:last-of-type").addEventListener("click", () => {
+    sortByProperty("lastName");
+  });
 }
 
 function loadJSON(url, callback) {
@@ -18,8 +27,10 @@ function loadJSON(url, callback) {
 }
 
 function handleData(data) {
+  // cleanup
   data.forEach(splitData);
   findDuplicateLastNames();
+  showStudents();
 }
 
 function splitData(student) {
@@ -116,5 +127,44 @@ function capitalize(str) {
 }
 
 function showStudents() {
-  console.table(studentArray);
+  //   filterByProperty("Gryffindor", "studentHouse");
+  //   sortByProperty("lastName");
+}
+
+// pass a value and a property to be filtered on
+// Value is fx. Gryffindor
+// Property is fx. studentHouse
+function filterByProperty(value, property) {
+  filterValue = value;
+  filterProperty = property;
+  console.log(`filtering: ${filterProperty} = ${filterValue}`);
+  console.table(studentArray.filter(isValue));
+  // filtering function
+  function isValue(student) {
+    if (student[filterProperty] == filterValue) {
+      return true;
+    } else return false;
+  }
+}
+
+function sortByProperty(property) {
+  if (event.target.dataset.sortDirection == "asc") {
+    event.target.dataset.sortDirection = "desc";
+    sortDirection = 1;
+  } else {
+    event.target.dataset.sortDirection = "asc";
+    sortDirection = -1;
+  }
+  let sortedStudents = studentArray;
+  sortProperty = property;
+  console.log(`sorting: ${sortProperty}, ${sortDirection}`);
+  console.table(sortedStudents.sort(sortStudents));
+  // sorting function
+  function sortStudents(studentA, studentB) {
+    if (studentA[sortProperty] < studentB[sortProperty]) {
+      return -1 * sortDirection;
+    } else {
+      return 1 * sortDirection;
+    }
+  }
 }
