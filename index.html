@@ -8,12 +8,108 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <p data-action="sort" data-sort-direction="asc" data-sort="firstName">
-      First name
-    </p>
-    <p data-action="sort" data-sort-direction="asc" data-sort="lastName">
-      Last name
-    </p>
+    <header>HOGWARTS STUDENT LIST - CLASS OF 1991</header>
+    <main>
+      <section>
+        <select name="sort" id="sort">
+          <option value="default">Select Sorting</option>
+          <option value="firstName asc">Sort by First Name A-Z</option>
+          <option value="firstName desc">Sort by First Name Z-A</option>
+          <option value="lastName asc">Sort by Last Name A-Z</option>
+          <option value="lastName desc">Sort by Last Name Z-A</option>
+          <option value="studentHouse asc">Sort by House A-Z</option>
+          <option value="studentHouse desc">Sort by House A-Z</option>
+        </select>
+        <select name="filter" id="filter">
+          <option value="default">No Filter</option>
+          <option value="studentHouse Gryffindor">Show Gryffindor</option>
+          <option value="studentHouse Ravenclaw">Show Ravenclaw</option>
+          <option value="studentHouse Hufflepuff">Show Hufflepuff</option>
+          <option value="studentHouse Slytherin">Show Slytherin</option>
+          <option value="isExpelled 0">Show Active Students</option>
+          <option value="isExpelled 1">Show Expelled</option>
+          <option value="isPrefect 1">Show Prefects</option>
+          <option value="isInquisitor 1">Show Inquisitorial Squad</option>
+        </select>
+      </section>
+      <section id="student-list-wrapper">
+        <section id="student-list"></section>
+        <aside>
+          <h2>ABOUT</h2>
+          <section id="about-info">
+            <p id="total-count">Total Students:</p>
+            <p id="display-count">Displayed Students:</p>
+            <p id="expelled-count">Expelled Students:</p>
+            <p id="gryffindor-count">Gryffindor:</p>
+            <p id="ravenclaw-count">Ravenclaw:</p>
+            <p id="hufflepuff-count">Hufflepuff:</p>
+            <p id="slytherin-count">Slytherin:</p>
+            <p id="prefect-count">Prefects:</p>
+            <p id="inquisition-count">Inquisitorial squad:</p>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <footer><p>copy</p></footer>
+    <template id="student-card">
+      <article class="student-card">
+        <img
+          src="assets/student_images/abbott_h.png"
+          alt="student-name"
+          class="student-card-student-image"
+        />
+        <img
+          src="assets/house_sigils/gryffindor.png"
+          class="student-card-house-image"
+        />
+        <p class="student-card-name">Student Name</p>
+        <div class="student-card-additional-info"></div>
+        <button class="student-card-details-button">Details</button>
+        <!-- popup -->
+        <section class="student-details-wrapper">
+          <section class="student-details">
+            <div class="student-details-ribbon">
+              <img
+                class="student-details-house-crest"
+                src="assets/house_crests/Gryffindor.svg"
+              />
+              <img class="close-details" src="assets/ui_elements/close.svg" />
+            </div>
+            <section class="student-details-info">
+              <img
+                class="student-details-img"
+                src="assets/student_images/abbott_h.png"
+              />
+              <div class="student-details-text">
+                <p class="student-details-first-name">First Name:</p>
+                <p class="student-details-middle-name">Middle Name:</p>
+                <p class="student-details-last-name">Last Name:</p>
+                <p class="student-details-nick-name">Nick Name:</p>
+                <p class="student-details-house">House:</p>
+                <p class="student-details-blood-status">Blood Status:</p>
+                <div>
+                  <span>P</span>
+                  <span>I</span>
+                  <span>EX</span>
+                </div>
+              </div>
+            </section>
+            <section class="student-details-admin">
+              <button class="admin-add-prefect">Add as Prefect</button>
+              <button class="admin-add-inquisitor">
+                Add to Inquisitorial squad
+              </button>
+              <button class="admin-expel">Expel Student</button>
+              <button class="admin-remove-prefect">Remove Prefect</button>
+              <button class="admin-remove-inquisitor">
+                Remove from Inquisitorial squad
+              </button>
+            </section>
+          </section>
+        </section>
+      </article>
+    </template>
     <script src="student-list.js"></script>
   </body>
 </html>
