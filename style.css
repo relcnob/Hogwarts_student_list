@@ -81,6 +81,9 @@ main {
   gap: 0.5rem;
   align-items: center;
   margin: 0.4rem 0;
+  background: #ccc;
+  padding: 0.25rem 0.5rem;
+  transition: 0.5s ease-in-out;
 }
 
 .student-card-additional-info {
@@ -129,7 +132,6 @@ main {
 }
 
 .show-student-details {
-  display: flex;
   left: 0;
   background: rgba(0, 0, 0, 0.5);
   transition-delay: 0s, 0.4s;
@@ -239,15 +241,29 @@ main {
   /* student card */
 
   .student-card {
-    display: grid;
-    grid-template-columns: 48px 48px 5fr 2fr 2fr;
-    gap: 0.5rem;
-    align-items: center;
-    margin: 0.4rem 0;
+    grid-template-columns: 42px 42px 5fr 2fr 2fr;
+    padding: 0.5rem 1rem;
   }
 
   .student-card img {
-    width: 48px;
+    width: 100%;
+  }
+  .student-card-image-frame {
+    position: relative;
+  }
+
+  .student-card-image-frame::after {
+    display: block;
+    content: " ";
+    position: absolute;
+    top: 0px;
+    left: -1px;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+    background-image: url(assets/ui_elements/student-frame.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    z-index: 10;
   }
   /* popup styling */
 
@@ -257,32 +273,6 @@ main {
     display: flex;
     flex-direction: column;
     gap: 2rem;
-  }
-
-  .student-details-ribbon {
-    width: 101%;
-    height: 60px;
-    position: relative;
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    border: solid 4px #ccc;
-    border-left: none;
-    border-right: none;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
-  }
-  .student-details-ribbon img:first-of-type {
-    width: 100px;
-    position: absolute;
-    top: -20px;
-    left: -34 px;
-    filter: drop-shadow(0px 4px 2px rgb(0 0 0 / 0.5));
-  }
-  .student-details-ribbon img:last-of-type {
-    width: 30px;
-    position: absolute;
-    right: 20px;
-    cursor: pointer;
   }
 
   .student-details-info img {
@@ -321,5 +311,15 @@ main {
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
     padding: 1rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .student-card {
+    display: grid;
+    grid-template-columns: 48px 48px 4fr 2fr 2fr;
+    gap: 1rem;
+    align-items: center;
+    margin: 0.4rem 0;
   }
 }
