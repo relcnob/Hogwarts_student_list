@@ -33,17 +33,52 @@ img {
   width: 100%;
   display: block;
 }
+header {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+main {
+  padding: 0 1rem;
+}
 
 /* mobile styling */
 
 #student-list-wrapper {
   display: grid;
+  padding: 0.5rem 0;
+}
+#student-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+#interaction-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+#about-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+#about-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .student-card {
   display: grid;
-  grid-template-columns: 1fr 1fr 5fr 2fr 1fr;
-  gap: 0.4rem;
+  grid-template-columns: 32px 32px 5fr 2fr 2fr;
+  gap: 0.5rem;
   align-items: center;
   margin: 0.4rem 0;
 }
@@ -81,7 +116,7 @@ img {
   display: flex;
   position: fixed;
   top: 0;
-  left: 100%;
+  left: 120%;
   width: 100%;
   height: 100vh;
   z-index: 10;
@@ -101,12 +136,14 @@ img {
   transition-property: left, background-color;
 }
 
+/* student details */
 .student-details {
   background-color: #fff;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
 }
+
 .student-details-ribbon {
   width: 101%;
   height: 60px;
@@ -120,10 +157,10 @@ img {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
 }
 .student-details-ribbon img:first-of-type {
-  width: 60px;
+  width: 100px;
   position: absolute;
-  top: -8px;
-  left: -30px;
+  top: -24px;
+  left: -20px;
   filter: drop-shadow(0px 4px 2px rgb(0 0 0 / 0.5));
 }
 .student-details-ribbon img:last-of-type {
@@ -131,22 +168,48 @@ img {
   position: absolute;
   right: 20px;
   cursor: pointer;
-  filter: invert(1);
 }
 
 .student-details-info img {
-  width: 150px;
+  width: 100px;
+  height: auto;
+  position: relative;
+}
+
+.student-details-img-wrapper::after {
+  display: block;
+  content: " ";
+  position: absolute;
+  top: 0px;
+  left: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  background-image: url(assets/ui_elements/student-frame.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 10;
+}
+
+.student-details-img-wrapper {
+  width: fit-content;
+  position: relative;
+  margin: auto;
 }
 
 .student-details-info {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr;
+  gap: 1rem;
   padding: 1rem;
+}
+
+.student-details-info h2 {
+  margin-bottom: 0.5rem;
 }
 
 .student-details-admin {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   padding: 1rem;
 }
@@ -154,9 +217,109 @@ img {
 @media screen and (min-width: 768px) {
   #student-list-wrapper {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
   }
   #student-list-wrapper aside {
     order: initial;
+  }
+
+  #interaction-panel {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+  }
+
+  main {
+    padding: 0 3rem;
+  }
+  /* student card */
+
+  .student-card {
+    display: grid;
+    grid-template-columns: 48px 48px 5fr 2fr 2fr;
+    gap: 0.5rem;
+    align-items: center;
+    margin: 0.4rem 0;
+  }
+
+  .student-card img {
+    width: 48px;
+  }
+  /* popup styling */
+
+  /* student details */
+  .student-details {
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .student-details-ribbon {
+    width: 101%;
+    height: 60px;
+    position: relative;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    border: solid 4px #ccc;
+    border-left: none;
+    border-right: none;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
+  }
+  .student-details-ribbon img:first-of-type {
+    width: 100px;
+    position: absolute;
+    top: -20px;
+    left: -34 px;
+    filter: drop-shadow(0px 4px 2px rgb(0 0 0 / 0.5));
+  }
+  .student-details-ribbon img:last-of-type {
+    width: 30px;
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
+  }
+
+  .student-details-info img {
+    width: 150px;
+    height: auto;
+    position: relative;
+  }
+
+  .student-details-img-wrapper::after {
+    display: block;
+    content: " ";
+    position: absolute;
+    top: 0px;
+    left: -1px;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+    background-image: url(assets/ui_elements/student-frame.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    z-index: 10;
+  }
+
+  .student-details-img-wrapper {
+    width: fit-content;
+    position: relative;
+  }
+
+  .student-details-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 1rem;
+  }
+
+  .student-details-admin {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    padding: 1rem;
   }
 }
