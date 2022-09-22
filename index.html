@@ -21,7 +21,7 @@
           <option value="studentHouse desc">Sort by House A-Z</option>
         </select>
         <select name="filter" id="filter">
-          <option value="default">No Filter</option>
+          <option value="default">Show all students</option>
           <option value="studentHouse Gryffindor">Show Gryffindor</option>
           <option value="studentHouse Ravenclaw">Show Ravenclaw</option>
           <option value="studentHouse Hufflepuff">Show Hufflepuff</option>
@@ -39,7 +39,7 @@
         <aside id="about-panel">
           <h2>ABOUT</h2>
           <section id="about-info">
-            <p id="total-count">Total Students:</p>
+            <p id="total-count">Active Students:</p>
             <p id="display-count">Displayed Students:</p>
             <p id="expelled-count">Expelled Students:</p>
             <p id="gryffindor-count">Gryffindor:</p>
@@ -96,11 +96,7 @@
                 <p class="student-details-nick-name">Nick Name:</p>
                 <p class="student-details-house">House:</p>
                 <p class="student-details-blood-status">Blood Status:</p>
-                <div>
-                  <span>P</span>
-                  <span>I</span>
-                  <span>EX</span>
-                </div>
+                <div class="student-details-icons"></div>
               </div>
             </section>
             <section class="student-details-admin">

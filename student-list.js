@@ -31,7 +31,8 @@ function init() {
     searchTerm = false;
     activeArray = studentArray;
     document.querySelector("#filter").value = "default";
-    ocument.querySelector("#searchBar").value = "";
+    document.querySelector("#sort").value = "default";
+    document.querySelector("#searchBar").value = "";
     showStudents(activeArray);
   });
 }
@@ -208,9 +209,15 @@ function filterByProperty(value, property) {
   console.log(`filtering: ${filterProperty} = ${filterValue}`);
   if (document.querySelector("#searchBar").value !== "") {
     activeArray = searchArray.filter(isValue);
+  } else if (filterProperty == "isExpelled") {
+    activeArray = expelledArray;
+  } else if (filterProperty == "default") {
+    activeArray = studentArray.concat(expelledArray);
   } else {
     activeArray = studentArray.filter(isValue);
   }
+
+  // }
 
   showStudents(activeArray);
 }
@@ -224,15 +231,19 @@ function sortByProperty(property, dir) {
     }
     sortProperty = property;
     console.log(`sorting: ${sortProperty}, ${sortDirection}`);
-    if (searchEnabled == true) {
-      activeArray = searchArray.sort(sortStudents);
-    } else if (document.querySelector("#filter").value != "default") {
-      console.log(document.querySelector("#filter").value);
-      activeArray = activeArray.sort(sortStudents);
-      showStudents(activeArray);
-    } else {
-      activeArray = studentArray.sort(sortStudents);
-    }
+    // if (document.querySelector("#filter").value == "default") {
+    //   activeArray = activeArray.concat(expelledArray);
+    // }
+    // if (searchEnabled == true) {
+    //   activeArray = activeArray.sort(sortStudents);
+    // } else if (document.querySelector("#filter").value != "default") {
+    //   console.log(document.querySelector("#filter").value);
+    //   activeArray = activeArray.sort(sortStudents);
+    //   showStudents(activeArray);
+    // } else {
+    //   activeArray = activeArray.concat(expelledArray).sort(sortStudents);
+    // }
+    // activeArray = activeArray.sort(sortStudents)
     // sorting function
     function sortStudents(studentA, studentB) {
       if (studentA[sortProperty] < studentB[sortProperty]) {
@@ -242,7 +253,7 @@ function sortByProperty(property, dir) {
       }
     }
   }
-  showStudents(activeArray);
+  showStudents(activeArray.sort(sortStudents));
 }
 
 function handleSort() {
@@ -259,13 +270,14 @@ function handleFilter() {
 function searchStudents() {
   searchTerm = document.querySelector("#searchBar").value;
   searchEnabled = true;
+
   searchArray = studentArray.filter(isTerm);
+
   function isTerm(student) {
     firstName = student.firstName.toLowerCase();
     if (student.lastName != undefined) {
       lastName = student.lastName.toLowerCase();
     }
-
     if (lastName == undefined && firstName.toLowerCase().includes(searchTerm)) {
       return true;
     } else if (
@@ -281,7 +293,7 @@ function searchStudents() {
 function updateAbout(array) {
   console.log("Updating About...");
   document.querySelector("#total-count").textContent =
-    "Total Students: " + studentArray.length;
+    "Active Students: " + studentArray.length;
   document.querySelector(
     "#display-count"
   ).textContent = `Displayed Students: ${array.length}`;
@@ -329,6 +341,12 @@ function displayStudents(student) {
   const template = document.querySelector("#student-card").content;
   const clone = template.cloneNode(true);
   clone.querySelector(
+    ".student-card"
+  ).style.backgroundPositionX = `-${Math.floor(Math.random() * 100)}px`;
+  clone.querySelector(
+    ".student-card"
+  ).style.backgroundPositionY = `-${Math.floor(Math.random() * 100)}px`;
+  clone.querySelector(
     ".student-card-student-image"
   ).src = `assets/student_images/${student.studentImage}`;
 
@@ -365,41 +383,53 @@ function displayStudents(student) {
   }
   // check for blood/prefect/inquisition/expelled
   const iconWrapper = clone.querySelector(".student-card-additional-info");
+  const detailsIconWrapper = clone.querySelector(".student-details-icons");
   if (student.isPrefect == 1) {
-    const prefectIcon = document.createElement(`span`);
+    const prefectIcon = document.createElement(`img`);
     prefectIcon.classList.add(`student-card-prefect-status`);
-    prefectIcon.textContent = "P";
+    prefectIcon.src = "assets/ui_elements/prefect-icon.png";
+    prefectIcon.title = "Prefect";
     iconWrapper.appendChild(prefectIcon);
+    // detailsIconWrapper.appendChild(prefectIcon);
   }
   if (student.isInquisition == 1) {
-    const inquisitionIcon = document.createElement(`span`);
-    inquisitionIcon.classList.add(`student-card-inquisition-status`);
-    inquisitionIcon.textContent = "I";
+    const inquisitionIcon = document.createElement(`img`);
+    inquisitionIcon.classList.add(`student-card-inquisitor-status`);
+    inquisitionIcon.src = "assets/ui_elements/inquisition-icon.png";
+    inquisitionIcon.title = "Inquisition Squad";
     iconWrapper.appendChild(inquisitionIcon);
+    // detailsIconWrapper.appendChild(inquisitionIcon);
   }
   if (student.isExpelled == 1) {
-    const expelledIcon = document.createElement(`span`);
+    const expelledIcon = document.createElement(`img`);
     expelledIcon.classList.add(`student-card-expelled-status`);
-    expelledIcon.textContent = "EX";
+    expelledIcon.src = "assets/ui_elements/expelled-icon.png";
+    expelledIcon.title = "Expelled";
     iconWrapper.appendChild(expelledIcon);
+    // detailsIconWrapper.appendChild(expelledIcon);
   }
   // blood icons
   if (student.bloodStatus == "Pure-blood") {
-    const purebloodIcon = document.createElement(`span`);
-    purebloodIcon.classList.add(`student-card-expelled-status`);
-    purebloodIcon.textContent = "PB";
+    const purebloodIcon = document.createElement(`img`);
+    purebloodIcon.src = "assets/ui_elements/pure-blood.png";
+    purebloodIcon.classList.add(`student-card-blood-status`);
+    purebloodIcon.title = "Pure-blood";
     iconWrapper.appendChild(purebloodIcon);
+    // detailsIconWrapper.appendChild(purebloodIcon);
   }
   if (student.bloodStatus == "Half-blood") {
-    const halfbloodIcon = document.createElement(`span`);
-    halfbloodIcon.classList.add(`student-card-expelled-status`);
-    halfbloodIcon.textContent = "HB";
+    const halfbloodIcon = document.createElement(`img`);
+    halfbloodIcon.src = "assets/ui_elements/half-blood.png";
+    halfbloodIcon.classList.add(`student-card-blood-status`);
+    halfbloodIcon.title = "Half-blood";
     iconWrapper.appendChild(halfbloodIcon);
+    // detailsIconWrapper.appendChild(halfbloodIcon);
   }
   if (student.bloodStatus == "Muggle") {
-    const muggleIcon = document.createElement(`span`);
-    muggleIcon.classList.add(`student-card-expelled-status`);
-    muggleIcon.textContent = "MU";
+    const muggleIcon = document.createElement(`img`);
+    muggleIcon.src = "assets/ui_elements/muggle.png";
+    muggleIcon.classList.add(`student-card-blood-status`);
+    muggleIcon.title = "Muggle";
     iconWrapper.appendChild(muggleIcon);
   }
   // hide and show student details
@@ -612,12 +642,14 @@ function removePrefect() {
       prefectArray.splice(prefectIndex, 1);
     }
   });
-  let filterValues = document.querySelector("#filter").value.split(" ");
-  if (filterValues[0] !== "default") {
-    filterByProperty(filterValues[1], filterValues[0]);
-  } else {
-    showStudents(studentArray);
-  }
+  // let filterValues = document.querySelector("#filter").value.split(" ");
+  // console.log(filterValues);
+  // if (filterValues[0] !== "default") {
+  //   filterByProperty(filterValues[1], filterValues[0]);
+  // } else {
+  //   console.log("default");
+  //   activeArray = studentArray;
+  // }
   setTimeout(() => {
     showStudents(activeArray);
   }, 1000);
@@ -666,9 +698,15 @@ function expelStudent() {
       student.lastName == lastNameField
     ) {
       student.isExpelled = 1;
+      student.isInquisition = 0;
+      student.isPrefect = 0;
       expelledArray.push(student);
       let expelledIndex = studentArray.indexOf(student);
+      let prefectIndex = prefectArray.indexOf(student);
+      let inquisitionIndex = inquisitionArray.indexOf(student);
       studentArray.splice(expelledIndex, 1);
+      prefectArray.splice(prefectIndex, 1);
+      inquisitionArray.splice(inquisitionIndex, 1);
     }
   });
   // check if removed student isnt fitting
