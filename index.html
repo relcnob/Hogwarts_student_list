@@ -10,7 +10,7 @@
   <body>
     <header>HOGWARTS STUDENT LIST - CLASS OF 1991</header>
     <main>
-      <section>
+      <section id="interaction-panel">
         <select name="sort" id="sort">
           <option value="default">Select Sorting</option>
           <option value="firstName asc">Sort by First Name A-Z</option>
@@ -29,12 +29,14 @@
           <option value="isExpelled 0">Show Active Students</option>
           <option value="isExpelled 1">Show Expelled</option>
           <option value="isPrefect 1">Show Prefects</option>
-          <option value="isInquisitor 1">Show Inquisitorial Squad</option>
+          <option value="isInquisition 1">Show Inquisitorial Squad</option>
         </select>
+        <input type="text" placeholder="Search.." id="searchBar" />
+        <button id="showAllButton">Show all</button>
       </section>
       <section id="student-list-wrapper">
         <section id="student-list"></section>
-        <aside>
+        <aside id="about-panel">
           <h2>ABOUT</h2>
           <section id="about-info">
             <p id="total-count">Total Students:</p>
@@ -54,11 +56,14 @@
     <footer><p>copy</p></footer>
     <template id="student-card">
       <article class="student-card">
-        <img
-          src="assets/student_images/abbott_h.png"
-          alt="student-name"
-          class="student-card-student-image"
-        />
+        <div class="student-card-image-frame">
+          <img
+            src="assets/student_images/abbott_h.png"
+            alt="student-name"
+            class="student-card-student-image"
+          />
+        </div>
+
         <img
           src="assets/house_sigils/gryffindor.png"
           class="student-card-house-image"
@@ -72,16 +77,19 @@
             <div class="student-details-ribbon">
               <img
                 class="student-details-house-crest"
-                src="assets/house_crests/Gryffindor.svg"
+                src="assets/house_crests/Gryffindor.png"
               />
               <img class="close-details" src="assets/ui_elements/close.svg" />
             </div>
             <section class="student-details-info">
-              <img
-                class="student-details-img"
-                src="assets/student_images/abbott_h.png"
-              />
+              <div class="student-details-img-wrapper">
+                <img
+                  class="student-details-img"
+                  src="assets/student_images/abbott_h.png"
+                />
+              </div>
               <div class="student-details-text">
+                <h2>Student information</h2>
                 <p class="student-details-first-name">First Name:</p>
                 <p class="student-details-middle-name">Middle Name:</p>
                 <p class="student-details-last-name">Last Name:</p>
