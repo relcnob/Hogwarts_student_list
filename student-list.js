@@ -101,6 +101,8 @@ function splitData(student) {
     isExpelled: "",
     isPrefect: "",
     isInquisition: "",
+    bgPosX: "",
+    bgPosY: "",
   };
   const studentObject = Object.create(studentObj);
   studentObject.firstName = firstName;
@@ -113,6 +115,8 @@ function splitData(student) {
   studentObject.isExpelled = 0;
   studentObject.isPrefect = 0;
   studentObject.isInquisition = 0;
+  studentObject.bgPosX = Math.floor(Math.random() * 120);
+  studentObject.bgPosY = Math.floor(Math.random() * 120);
   // push student object into studentArray
   studentArray.push(studentObject);
 }
@@ -270,7 +274,6 @@ function handleFilter() {
 function searchStudents() {
   searchTerm = document.querySelector("#searchBar").value;
   searchEnabled = true;
-
   searchArray = studentArray.filter(isTerm);
 
   function isTerm(student) {
@@ -287,7 +290,13 @@ function searchStudents() {
       return true;
     } else return false;
   }
-  showStudents(searchArray);
+  if (document.querySelector("#filter").value !== "default") {
+    activeArray = searchArray;
+    let options = document.querySelector("#filter").value.split(" ");
+    filterByProperty(options[1], options[0]);
+  } else {
+    showStudents(searchArray);
+  }
 }
 
 function updateAbout(array) {
@@ -301,28 +310,28 @@ function updateAbout(array) {
     "#expelled-count"
   ).textContent = `Expelled Students: ${expelledArray.length}`;
   document.querySelector("#gryffindor-count").textContent = `Gryffindor: ${
-    activeArray.filter((student) => {
+    studentArray.filter((student) => {
       if (student.studentHouse == "Gryffindor" && student.isExpelled == 0) {
         return 1;
       } else return 0;
     }).length
   }`;
   document.querySelector("#ravenclaw-count").textContent = `Ravenclaw: ${
-    activeArray.filter((student) => {
+    studentArray.filter((student) => {
       if (student.studentHouse == "Ravenclaw" && student.isExpelled == 0) {
         return 1;
       } else return 0;
     }).length
   }`;
   document.querySelector("#hufflepuff-count").textContent = `Hufflepuff: ${
-    activeArray.filter((student) => {
+    studentArray.filter((student) => {
       if (student.studentHouse == "Hufflepuff" && student.isExpelled == 0) {
         return 1;
       } else return 0;
     }).length
   }`;
   document.querySelector("#slytherin-count").textContent = `Slytherin: ${
-    activeArray.filter((student) => {
+    studentArray.filter((student) => {
       if (student.studentHouse == "Slytherin" && student.isExpelled == 0) {
         return 1;
       } else return 0;
@@ -340,12 +349,8 @@ function displayStudents(student) {
   const parent = document.querySelector("#student-list");
   const template = document.querySelector("#student-card").content;
   const clone = template.cloneNode(true);
-  clone.querySelector(
-    ".student-card"
-  ).style.backgroundPositionX = `-${Math.floor(Math.random() * 100)}px`;
-  clone.querySelector(
-    ".student-card"
-  ).style.backgroundPositionY = `-${Math.floor(Math.random() * 100)}px`;
+  const bgPosition = `-${student.bgPosX}px -${student.bgPosY}px`;
+  clone.querySelector(".student-card").style.backgroundPosition = bgPosition;
   clone.querySelector(
     ".student-card-student-image"
   ).src = `assets/student_images/${student.studentImage}`;

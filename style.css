@@ -42,6 +42,10 @@ main {
   padding: 0 1rem;
 }
 
+button {
+  font-family: var(--mainFont);
+}
+
 /* mobile styling */
 
 #student-list-wrapper {
