@@ -204,6 +204,7 @@ function showStudents(array) {
 function filterByProperty(value, property) {
   filterValue = value;
   filterProperty = property;
+  let notifText = property.split(/(?=[A-Z])/);
   // filtering function
   function isValue(student) {
     if (student[filterProperty] == filterValue) {
@@ -213,16 +214,29 @@ function filterByProperty(value, property) {
   console.log(`filtering: ${filterProperty} = ${filterValue}`);
   if (document.querySelector("#searchBar").value !== "") {
     activeArray = searchArray.filter(isValue);
-  } else if (filterProperty == "isExpelled") {
+    showBlueMessage("Filtering search results");
+  } else if (filterProperty == "isExpelled" && filterValue == "1") {
     activeArray = expelledArray;
+    showBlueMessage("Showing expelled students");
   } else if (filterProperty == "default") {
     activeArray = studentArray.concat(expelledArray);
+    showBlueMessage("Showing all students");
   } else {
     activeArray = studentArray.filter(isValue);
+    if (property == "studentHouse") {
+      showBlueMessage(
+        `Filtering ${capitalize(notifText[0])} ${notifText[1]} - ${value}`
+      );
+    } else if (property == "isExpelled" && value == "1") {
+      showBlueMessage(`Showing expelled students`);
+    } else if (property == "isExpelled" && value == "0") {
+      showBlueMessage(`Showing active students`);
+    } else if (property == "isPrefect") {
+      showBlueMessage(`Showing Prefects`);
+    } else if (property == "isInquisition") {
+      showBlueMessage(`Showing Inquisitorial squad`);
+    }
   }
-
-  // }
-
   showStudents(activeArray);
 }
 
@@ -235,20 +249,7 @@ function sortByProperty(property, dir) {
     }
     sortProperty = property;
     console.log(`sorting: ${sortProperty}, ${sortDirection}`);
-    // if (document.querySelector("#filter").value == "default") {
-    //   activeArray = activeArray.concat(expelledArray);
-    // }
-    // if (searchEnabled == true) {
-    //   activeArray = activeArray.sort(sortStudents);
-    // } else if (document.querySelector("#filter").value != "default") {
-    //   console.log(document.querySelector("#filter").value);
-    //   activeArray = activeArray.sort(sortStudents);
-    //   showStudents(activeArray);
-    // } else {
-    //   activeArray = activeArray.concat(expelledArray).sort(sortStudents);
-    // }
-    // activeArray = activeArray.sort(sortStudents)
-    // sorting function
+
     function sortStudents(studentA, studentB) {
       if (studentA[sortProperty] < studentB[sortProperty]) {
         return -1 * sortDirection;
@@ -257,6 +258,25 @@ function sortByProperty(property, dir) {
       }
     }
   }
+  let notifText = property.split(/(?=[A-Z])/);
+  let direction;
+  if (dir == "asc") {
+    direction = "A-Z";
+  } else if (dir == "desc") {
+    direction = "Z-A";
+  } else {
+    direction = "";
+  }
+  if (notifText.length == 1) {
+    showBlueMessage("Default sorting");
+  } else {
+    showBlueMessage(
+      `Sorting by ${capitalize(notifText[0])} ${capitalize(
+        notifText[1]
+      )} - ${direction}`
+    );
+  }
+
   showStudents(activeArray.sort(sortStudents));
 }
 
@@ -280,12 +300,14 @@ function searchStudents() {
     firstName = student.firstName.toLowerCase();
     if (student.lastName != undefined) {
       lastName = student.lastName.toLowerCase();
+      fullName = `${firstName} ${lastName}`;
     }
     if (lastName == undefined && firstName.toLowerCase().includes(searchTerm)) {
       return true;
     } else if (
       firstName.toLowerCase().includes(searchTerm) ||
-      lastName.toLowerCase().includes(searchTerm)
+      lastName.toLowerCase().includes(searchTerm) ||
+      fullName.toLowerCase().includes(searchTerm)
     ) {
       return true;
     } else return false;
@@ -302,10 +324,12 @@ function searchStudents() {
 function updateAbout(array) {
   console.log("Updating About...");
   document.querySelector("#total-count").textContent =
+    "All Students: " + studentArray.concat(expelledArray).length;
+  document.querySelector("#active-count").textContent =
     "Active Students: " + studentArray.length;
   document.querySelector(
     "#display-count"
-  ).textContent = `Displayed Students: ${array.length}`;
+  ).textContent = `Displayed Students: ${activeArray.length}`;
   document.querySelector(
     "#expelled-count"
   ).textContent = `Expelled Students: ${expelledArray.length}`;
@@ -435,7 +459,9 @@ function displayStudents(student) {
     muggleIcon.src = "assets/ui_elements/muggle.png";
     muggleIcon.classList.add(`student-card-blood-status`);
     muggleIcon.title = "Muggle";
+    secondIcon = muggleIcon.cloneNode(true);
     iconWrapper.appendChild(muggleIcon);
+    detailsIconWrapper.appendChild(secondIcon);
   }
   // hide and show student details
   clone
@@ -592,8 +618,9 @@ function addAsPrefect() {
       if (prefectCount < "2" && prefectGender < "1") {
         student.isPrefect = 1;
         prefectArray.push(student);
+        showGreenMessage("Student added as Prefect");
       } else {
-        console.log("too many prefects");
+        showRedMessage(`Too many prefects in ${student.studentHouse}`);
       }
     }
   });
@@ -619,15 +646,37 @@ function addAsInquisitor() {
       if (
         student.bloodStatus == "Pure-blood" &&
         student.studentHouse == "Slytherin"
-      )
+      ) {
         student.isInquisition = 1;
-      inquisitionArray.push(student);
+        showGreenMessage("Student added to Inquisitorial Squad");
+        inquisitionArray.push(student);
+      } else if (
+        student.bloodStatus == "Pure-blood" &&
+        student.studentHouse !== "Slytherin"
+      ) {
+        showRedMessage("Only Slytherin students can join Inquisitorial Squad");
+      } else if (
+        student.bloodStatus !== "Pure-blood" &&
+        student.studentHouse == "Slytherin"
+      ) {
+        showRedMessage(
+          "Only Pure-blooded students can join Inquisitorial Squad"
+        );
+      } else if (
+        student.bloodStatus !== "Pure-blood" &&
+        student.studentHouse !== "Slytherin"
+      ) {
+        showRedMessage(
+          "Only Pure-blooded Slytherin students can join Inquisitorial Squad"
+        );
+      }
     }
   });
   setTimeout(() => {
     showStudents(activeArray);
   }, 1000);
 }
+
 function removePrefect() {
   const parent = this.parentElement.parentElement;
   parent.parentElement.classList.remove("show-student-details");
@@ -647,17 +696,10 @@ function removePrefect() {
       prefectArray.splice(prefectIndex, 1);
     }
   });
-  // let filterValues = document.querySelector("#filter").value.split(" ");
-  // console.log(filterValues);
-  // if (filterValues[0] !== "default") {
-  //   filterByProperty(filterValues[1], filterValues[0]);
-  // } else {
-  //   console.log("default");
-  //   activeArray = studentArray;
-  // }
   setTimeout(() => {
     showStudents(activeArray);
   }, 1000);
+  showRedMessage("Prefect Removed");
 }
 function removeInquisitor() {
   const parent = this.parentElement.parentElement;
@@ -671,11 +713,13 @@ function removeInquisitor() {
   studentArray.filter((student) => {
     if (
       student.firstName == firstNameField &&
-      student.lastName == lastNameField
+      student.lastName == lastNameField &&
+      student.isInquisition == 1
     ) {
       student.isInquisition = 0;
       let inquisitionIndex = inquisitionArray.indexOf(student);
       inquisitionArray.splice(inquisitionIndex, 1);
+      showRedMessage("Student removed from Inquisitorial Squad");
     }
   });
   let filterValues = document.querySelector("#filter").value.split(" ");
@@ -697,10 +741,13 @@ function expelStudent() {
   const lastNameField = parent
     .querySelector(".student-details-last-name")
     .textContent.split(" ")[2];
+
+  // maybe use findindex
   studentArray.filter((student) => {
     if (
       student.firstName == firstNameField &&
-      student.lastName == lastNameField
+      student.lastName == lastNameField &&
+      student.isExpelled !== 1
     ) {
       student.isExpelled = 1;
       student.isInquisition = 0;
@@ -712,6 +759,7 @@ function expelStudent() {
       studentArray.splice(expelledIndex, 1);
       prefectArray.splice(prefectIndex, 1);
       inquisitionArray.splice(inquisitionIndex, 1);
+      showRedMessage("Student Expelled");
     }
   });
   // check if removed student isnt fitting
@@ -723,4 +771,31 @@ function expelStudent() {
   setTimeout(() => {
     showStudents(activeArray);
   }, 1000);
+}
+
+function showRedMessage(text) {
+  redNotif = document.querySelector(".notification-red");
+  redNotif.textContent = text;
+  redNotif.classList.add("show-notification");
+  setTimeout(() => {
+    redNotif.classList.remove("show-notification");
+  }, 3000);
+}
+
+function showGreenMessage(text) {
+  greenNotif = document.querySelector(".notification-green");
+  greenNotif.textContent = text;
+  greenNotif.classList.add("show-notification");
+  setTimeout(() => {
+    greenNotif.classList.remove("show-notification");
+  }, 3000);
+}
+
+function showBlueMessage(text) {
+  blueNotif = document.querySelector(".notification-blue");
+  blueNotif.textContent = text;
+  blueNotif.classList.add("show-notification");
+  setTimeout(() => {
+    blueNotif.classList.remove("show-notification");
+  }, 3000);
 }

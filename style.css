@@ -48,6 +48,81 @@ button {
 
 /* mobile styling */
 
+/* notifications */
+.notification-red,
+.notification-blue,
+.notification-green {
+  position: fixed;
+  top: 64px;
+  right: -120%;
+  padding: 0.75rem 1rem;
+  transition: 1s ease-in-out;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.301);
+  z-index: 10;
+}
+
+.notification-red {
+  background-color: rgb(233, 16, 16);
+  background-image: url(assets/textures/red-notif-bg.jpg);
+  background-size: contain;
+  background-repeat: repeat-x;
+  z-index: 12;
+  top: 64px;
+}
+
+.notification-red:before {
+  content: " ";
+  position: absolute;
+  top: 0;
+  left: -30px;
+  height: 100%;
+  aspect-ratio: 1/1;
+  background-image: url(assets/textures/red-notif-ribbon.png);
+  background-size: contain;
+}
+
+.notification-blue {
+  background-color: rgb(16, 117, 233);
+  background-image: url(assets/textures/blue-notif-bg.jpg);
+  background-size: contain;
+  background-repeat: repeat-x;
+  top: 12px;
+}
+
+.notification-blue:before {
+  content: " ";
+  position: absolute;
+  top: 0;
+  left: -30px;
+  height: 100%;
+  aspect-ratio: 1/1;
+  background-image: url(assets/textures/blue-notif-ribbon.png);
+  background-size: contain;
+}
+
+.notification-green {
+  background-color: rgb(30, 107, 65);
+  background-image: url(assets/textures/green-notif-bg.jpg);
+  background-size: contain;
+  background-repeat: repeat-x;
+  z-index: 11;
+}
+.notification-green:before {
+  content: " ";
+  position: absolute;
+  top: 0;
+  left: -30px;
+  height: 100%;
+  aspect-ratio: 1/1;
+  background-image: url(assets/textures/green-notif-ribbon.png);
+  background-size: contain;
+}
+
+.show-notification {
+  right: 0;
+}
+
 #student-list-wrapper {
   display: grid;
   padding: 0.5rem 0;
@@ -89,12 +164,16 @@ button {
   transition: 0.5s ease-in-out;
   border-radius: 0.5rem;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.219);
-  outline: solid 2px rgba(231, 37, 24, 0);
+  outline: solid 2px rgba(231, 37, 24, 0.1);
 }
 
 .student-card:hover {
   box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.4);
   outline: solid 2px rgba(231, 72, 24, 0.233);
+}
+
+.student-card-name {
+  color: rgb(68, 10, 10);
 }
 
 .student-card button {
@@ -134,6 +213,16 @@ button {
   filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.2));
 }
 
+.student-card-details-button {
+  border: none;
+  background: linear-gradient(45deg, rgb(173, 63, 43), rgb(150, 45, 26));
+  color: rgb(255, 186, 130);
+  border-radius: 0.2rem;
+  padding: 0.2rem 0;
+  border: double 3px rgba(255, 157, 92, 0.5);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.377);
+}
+
 /* popup */
 
 .student-details-wrapper {
@@ -150,6 +239,7 @@ button {
   transition-duration: 0.5s;
   transition-delay: 0.5s, 0s;
   transition-property: left, background-color;
+  transition-timing-function: ease-in-out;
 }
 
 .show-student-details {
