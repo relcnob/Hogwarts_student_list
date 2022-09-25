@@ -19,14 +19,17 @@ let searchEnabled;
 let hackerMode = 0;
 // init function on DOMContentLoaded
 document.addEventListener("DOMContentLoaded", init);
+
 function init() {
   loadJSON(bloodJson, handleBlood);
   loadJSON(jsonList, handleData);
+  // Event listeners
   document.querySelector("#sort").addEventListener("change", handleSort);
   document.querySelector("#filter").addEventListener("change", handleFilter);
   document
     .querySelector("#searchBar")
     .addEventListener("input", searchStudents);
+  // reset view
   document.querySelector("#showAllButton").addEventListener("click", () => {
     searchTerm = false;
     activeArray = studentArray;
@@ -35,6 +38,8 @@ function init() {
     document.querySelector("#searchBar").value = "";
     showStudents(activeArray);
   });
+  // hacking mode
+  document.addEventListener("keydown", handleHack);
 }
 
 function loadJSON(url, callback) {
@@ -91,7 +96,7 @@ function splitData(student) {
   }
   // create student Object
   const studentObj = {
-    fistName: "",
+    firstName: "",
     lastName: "",
     middleName: "",
     nickName: "",
@@ -441,6 +446,7 @@ function displayStudents(student) {
     detailsIconWrapper.appendChild(secondIcon);
   }
   // blood icons
+
   if (student.bloodStatus == "Pure-blood") {
     const purebloodIcon = document.createElement(`img`);
     purebloodIcon.src = "assets/ui_elements/pure-blood.png";
@@ -655,7 +661,8 @@ function addAsInquisitor() {
     ) {
       if (
         student.bloodStatus == "Pure-blood" &&
-        student.studentHouse == "Slytherin"
+        student.studentHouse == "Slytherin" &&
+        student.isInquisition !== 1
       ) {
         student.isInquisition = 1;
         showGreenMessage("Student added to Inquisitorial Squad");
@@ -679,6 +686,17 @@ function addAsInquisitor() {
         showRedMessage(
           "Only Pure-blooded Slytherin students can join Inquisitorial Squad"
         );
+      }
+      if (
+        hackerMode == 1 &&
+        student.studentHouse == "Slytherin" &&
+        student.isInquisition == 1
+      ) {
+        setTimeout(() => {
+          student.isInquisition = 0;
+          showRedMessage("Nice try");
+          showStudents(activeArray);
+        }, 4000);
       }
     }
   });
@@ -752,9 +770,11 @@ function expelStudent() {
     .querySelector(".student-details-last-name")
     .textContent.split(" ")[2];
 
-  // maybe use findindex
   studentArray.filter((student) => {
-    if (
+    if (student.firstName == "Fryderyk" && hackerMode == 1) {
+      showBlueMessage("Nice try");
+      showGreenMessage("Nice try");
+    } else if (
       student.firstName == firstNameField &&
       student.lastName == lastNameField &&
       student.isExpelled !== 1
@@ -808,4 +828,86 @@ function showBlueMessage(text) {
   setTimeout(() => {
     blueNotif.classList.remove("show-notification");
   }, 4000);
+}
+
+function handleHack(e) {
+  if (e.key == "h" && hackerMode !== 1) {
+    hackTheSystem();
+  }
+}
+
+function hackTheSystem() {
+  if (hackerMode != 1) {
+    console.log("Hacker mode engaged");
+    hackerMode = 1;
+    // hacker overlay
+    document.querySelector(".hacker-overlay").classList.add("showHackOverlay");
+    setTimeout(() => {
+      document.querySelector(".hacker-loader").classList.add("startLoading");
+    }, 500);
+    document
+      .querySelector(".loader-message")
+      .addEventListener("animationend", () => {
+        console.log("finished loading");
+        document
+          .querySelector(".hacker-overlay")
+          .classList.remove("showHackOverlay");
+        insertHacker();
+        document.querySelector("body").classList.add("hacked");
+      });
+
+    // hacker object for insert
+    function insertHacker() {
+      const hackerObj = {
+        firstName: "Fryderyk",
+        lastName: "Boncler",
+        middleName: undefined,
+        nickName: undefined,
+        studentHouse: "Gryffindor",
+        studentGender: "Boy",
+        studentImage: "me.png",
+        bloodStatus: "Pure-blood",
+        isExpelled: "0",
+        isPrefect: "1",
+        isInquisition: "1",
+        bgPosX: "",
+        bgPosY: "",
+      };
+      const hackerObject = Object.create(hackerObj);
+      hackerObject.firstName;
+      hackerObject.lastName;
+      hackerObject.middleName;
+      hackerObject.nickName;
+      hackerObject.studentHouse;
+      hackerObject.studentGender;
+      hackerObject.bloodStatus;
+      hackerObject.isExpelled;
+      hackerObject.isPrefect;
+      hackerObject.isInquisition;
+      hackerObject.bgPosX = Math.floor(Math.random() * 120);
+      hackerObject.bgPosY = Math.floor(Math.random() * 120);
+      // push student object into studentArray
+      studentArray.unshift(hackerObject);
+      showStudents(activeArray);
+    }
+    studentArray.forEach((student) => {
+      if (
+        student.bloodStatus == "Pure-blood" &&
+        hackerMode == 1 &&
+        student.firstName !== "Fryderyk"
+      ) {
+        let newBlood = Math.floor(Math.random() * 2 + 1);
+        if (newBlood == 1) {
+          student.bloodStatus = "Muggle";
+        } else if (newBlood == 2) {
+          student.bloodStatus = "Half-blood";
+        }
+      } else if (student.bloodStatus !== "Pure-blood" && hackerMode == 1) {
+        student.bloodStatus = "Pure-blood";
+        console.log(student.bloodStatus);
+      }
+    });
+  } else {
+    console.log("Hacking already enabled");
+  }
 }

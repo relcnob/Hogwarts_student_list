@@ -6,8 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hogwarts Student List</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="hacker.css" />
   </head>
   <body>
+    <div class="hacker-overlay">
+      <section>
+        <h2>Hacking mode enabled</h2>
+        <span class="hacker-loader"
+          ><span class="loader-message">Loading finished</span>
+        </span>
+      </section>
+    </div>
     <header>
       <h1>HOGWARTS STUDENT LIST - CLASS OF 1991</h1>
       <section id="interaction-panel">
@@ -39,6 +48,7 @@
       <div class="notification-red">TEST ERROR</div>
       <div class="notification-green">TEST OK</div>
       <div class="notification-blue">TEST INFO</div>
+
       <section id="student-list-wrapper">
         <section id="student-list"></section>
         <aside>
