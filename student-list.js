@@ -418,24 +418,27 @@ function displayStudents(student) {
     prefectIcon.classList.add(`student-card-prefect-status`);
     prefectIcon.src = "assets/ui_elements/prefect-icon.png";
     prefectIcon.title = "Prefect";
+    secondIcon = prefectIcon.cloneNode(true);
     iconWrapper.appendChild(prefectIcon);
-    // detailsIconWrapper.appendChild(prefectIcon);
+    detailsIconWrapper.appendChild(secondIcon);
   }
   if (student.isInquisition == 1) {
     const inquisitionIcon = document.createElement(`img`);
     inquisitionIcon.classList.add(`student-card-inquisitor-status`);
     inquisitionIcon.src = "assets/ui_elements/inquisition-icon.png";
     inquisitionIcon.title = "Inquisition Squad";
+    secondIcon = inquisitionIcon.cloneNode(true);
     iconWrapper.appendChild(inquisitionIcon);
-    // detailsIconWrapper.appendChild(inquisitionIcon);
+    detailsIconWrapper.appendChild(secondIcon);
   }
   if (student.isExpelled == 1) {
     const expelledIcon = document.createElement(`img`);
     expelledIcon.classList.add(`student-card-expelled-status`);
     expelledIcon.src = "assets/ui_elements/expelled-icon.png";
     expelledIcon.title = "Expelled";
+    secondIcon = expelledIcon.cloneNode(true);
     iconWrapper.appendChild(expelledIcon);
-    // detailsIconWrapper.appendChild(expelledIcon);
+    detailsIconWrapper.appendChild(secondIcon);
   }
   // blood icons
   if (student.bloodStatus == "Pure-blood") {
@@ -443,16 +446,18 @@ function displayStudents(student) {
     purebloodIcon.src = "assets/ui_elements/pure-blood.png";
     purebloodIcon.classList.add(`student-card-blood-status`);
     purebloodIcon.title = "Pure-blood";
+    secondIcon = purebloodIcon.cloneNode(true);
     iconWrapper.appendChild(purebloodIcon);
-    // detailsIconWrapper.appendChild(purebloodIcon);
+    detailsIconWrapper.appendChild(secondIcon);
   }
   if (student.bloodStatus == "Half-blood") {
     const halfbloodIcon = document.createElement(`img`);
     halfbloodIcon.src = "assets/ui_elements/half-blood.png";
     halfbloodIcon.classList.add(`student-card-blood-status`);
     halfbloodIcon.title = "Half-blood";
+    secondIcon = halfbloodIcon.cloneNode(true);
     iconWrapper.appendChild(halfbloodIcon);
-    // detailsIconWrapper.appendChild(halfbloodIcon);
+    detailsIconWrapper.appendChild(secondIcon);
   }
   if (student.bloodStatus == "Muggle") {
     const muggleIcon = document.createElement(`img`);
@@ -491,6 +496,7 @@ function displayStudents(student) {
       ".student-details-ribbon img:last-of-type"
     ).style.filter =
       "invert(87%) sepia(39%) saturate(713%) hue-rotate(323deg) brightness(95%) contrast(87%)";
+    clone.querySelector(".student-details").style.borderColor = "#e4b773";
   } else if (student.studentHouse == "Ravenclaw") {
     clone.querySelector(".student-details-ribbon").style.backgroundColor =
       "#4785f3";
@@ -500,6 +506,7 @@ function displayStudents(student) {
       ".student-details-ribbon img:last-of-type"
     ).style.filter =
       "invert(100%) sepia(0%) saturate(1574%) hue-rotate(251deg) brightness(83%) contrast(115%)";
+    clone.querySelector(".student-details").style.borderColor = "#e0e0e0";
   } else if (student.studentHouse == "Hufflepuff") {
     clone.querySelector(".student-details-ribbon").style.backgroundColor =
       "#ffb63c";
@@ -509,6 +516,7 @@ function displayStudents(student) {
       ".student-details-ribbon img:last-of-type"
     ).style.filter =
       "invert(4%) sepia(15%) saturate(249%) hue-rotate(349deg) brightness(97%) contrast(94%)";
+    clone.querySelector(".student-details").style.borderColor = "#131211";
   } else if (student.studentHouse == "Slytherin") {
     clone.querySelector(".student-details-ribbon").style.backgroundColor =
       "#34a569";
@@ -518,7 +526,9 @@ function displayStudents(student) {
       ".student-details-ribbon img:last-of-type"
     ).style.filter =
       "invert(10%) sepia(0%) saturate(1%) hue-rotate(98deg) brightness(89%) contrast(91%)";
+    clone.querySelector(".student-details").style.borderColor = "#202020";
   }
+
   // student details
   clone.querySelector(
     ".student-details-img"
@@ -779,7 +789,7 @@ function showRedMessage(text) {
   redNotif.classList.add("show-notification");
   setTimeout(() => {
     redNotif.classList.remove("show-notification");
-  }, 3000);
+  }, 4000);
 }
 
 function showGreenMessage(text) {
@@ -788,7 +798,7 @@ function showGreenMessage(text) {
   greenNotif.classList.add("show-notification");
   setTimeout(() => {
     greenNotif.classList.remove("show-notification");
-  }, 3000);
+  }, 4000);
 }
 
 function showBlueMessage(text) {
@@ -797,5 +807,5 @@ function showBlueMessage(text) {
   blueNotif.classList.add("show-notification");
   setTimeout(() => {
     blueNotif.classList.remove("show-notification");
-  }, 3000);
+  }, 4000);
 }
