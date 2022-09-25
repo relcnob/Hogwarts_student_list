@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <header>HOGWARTS STUDENT LIST - CLASS OF 1991</header>
-    <main>
+    <header>
+      <h1>HOGWARTS STUDENT LIST - CLASS OF 1991</h1>
       <section id="interaction-panel">
         <select name="sort" id="sort">
           <option value="default">Select Sorting</option>
@@ -21,7 +21,7 @@
           <option value="studentHouse desc">Sort by House A-Z</option>
         </select>
         <select name="filter" id="filter">
-          <option value="default">No Filter</option>
+          <option value="default">Show all students</option>
           <option value="studentHouse Gryffindor">Show Gryffindor</option>
           <option value="studentHouse Ravenclaw">Show Ravenclaw</option>
           <option value="studentHouse Hufflepuff">Show Hufflepuff</option>
@@ -34,26 +34,35 @@
         <input type="text" placeholder="Search.." id="searchBar" />
         <button id="showAllButton">Show all</button>
       </section>
+    </header>
+    <main>
+      <div class="notification-red">TEST ERROR</div>
+      <div class="notification-green">TEST OK</div>
+      <div class="notification-blue">TEST INFO</div>
       <section id="student-list-wrapper">
         <section id="student-list"></section>
-        <aside id="about-panel">
-          <h2>ABOUT</h2>
-          <section id="about-info">
-            <p id="total-count">Total Students:</p>
-            <p id="display-count">Displayed Students:</p>
-            <p id="expelled-count">Expelled Students:</p>
-            <p id="gryffindor-count">Gryffindor:</p>
-            <p id="ravenclaw-count">Ravenclaw:</p>
-            <p id="hufflepuff-count">Hufflepuff:</p>
-            <p id="slytherin-count">Slytherin:</p>
-            <p id="prefect-count">Prefects:</p>
-            <p id="inquisition-count">Inquisitorial squad:</p>
-          </section>
+        <aside>
+          <div id="about-panel">
+            <section id="about-info">
+              <h2>ABOUT</h2>
+              <p id="total-count">All Students:</p>
+              <p id="active-count">Active Students:</p>
+              <p id="display-count">Displayed Students:</p>
+              <p id="expelled-count">Expelled Students:</p>
+              <p id="gryffindor-count">Gryffindor:</p>
+              <p id="ravenclaw-count">Ravenclaw:</p>
+              <p id="hufflepuff-count">Hufflepuff:</p>
+              <p id="slytherin-count">Slytherin:</p>
+              <p id="prefect-count">Prefects:</p>
+              <p id="inquisition-count">Inquisitorial squad:</p>
+            </section>
+            <img src="assets/house_crests/Hogwarts.png" />
+          </div>
         </aside>
       </section>
     </main>
 
-    <footer><p>copy</p></footer>
+    <footer><p>&copy 2022 Fryderyk Boncler</p></footer>
     <template id="student-card">
       <article class="student-card">
         <div class="student-card-image-frame">
@@ -96,11 +105,7 @@
                 <p class="student-details-nick-name">Nick Name:</p>
                 <p class="student-details-house">House:</p>
                 <p class="student-details-blood-status">Blood Status:</p>
-                <div>
-                  <span>P</span>
-                  <span>I</span>
-                  <span>EX</span>
-                </div>
+                <div class="student-details-icons"></div>
               </div>
             </section>
             <section class="student-details-admin">
