@@ -1,7 +1,7 @@
 "uses strict";
 //declare constants and global variables
-const jsonList = "/assets/json_files/students.json";
-const bloodJson = "/assets/json_files/families.json";
+const jsonList = "assets/json_files/students.json";
+const bloodJson = "assets/json_files/families.json";
 const studentArray = [];
 const expelledArray = [];
 const prefectArray = [];
@@ -416,11 +416,11 @@ function displayStudents(student) {
   clone.querySelector(".student-card").style.backgroundPosition = bgPosition;
   clone.querySelector(
     ".student-card-student-image"
-  ).src = `/assets/student_images/${student.studentImage}`;
+  ).src = `assets/student_images/${student.studentImage}`;
 
   clone.querySelector(
     ".student-card-house-image"
-  ).src = `/assets/house_crests/${student.studentHouse}.png`;
+  ).src = `assets/house_crests/${student.studentHouse}.png`;
   clone.querySelector(
     ".student-card-house-image"
   ).alt = `${student.studentHouse}`;
@@ -455,7 +455,7 @@ function displayStudents(student) {
   if (student.isPrefect == 1) {
     const prefectIcon = document.createElement(`img`);
     prefectIcon.classList.add(`student-card-prefect-status`);
-    prefectIcon.src = "/assets/ui_elements/prefect-icon.png";
+    prefectIcon.src = "assets/ui_elements/prefect-icon.png";
     prefectIcon.title = "Prefect";
     secondIcon = prefectIcon.cloneNode(true);
     iconWrapper.appendChild(prefectIcon);
@@ -464,7 +464,7 @@ function displayStudents(student) {
   if (student.isInquisition == 1) {
     const inquisitionIcon = document.createElement(`img`);
     inquisitionIcon.classList.add(`student-card-inquisitor-status`);
-    inquisitionIcon.src = "/assets/ui_elements/inquisition-icon.png";
+    inquisitionIcon.src = "assets/ui_elements/inquisition-icon.png";
     inquisitionIcon.title = "Inquisition Squad";
     secondIcon = inquisitionIcon.cloneNode(true);
     iconWrapper.appendChild(inquisitionIcon);
@@ -473,7 +473,7 @@ function displayStudents(student) {
   if (student.isExpelled == 1) {
     const expelledIcon = document.createElement(`img`);
     expelledIcon.classList.add(`student-card-expelled-status`);
-    expelledIcon.src = "/assets/ui_elements/expelled-icon.png";
+    expelledIcon.src = "assets/ui_elements/expelled-icon.png";
     expelledIcon.title = "Expelled";
     secondIcon = expelledIcon.cloneNode(true);
     iconWrapper.appendChild(expelledIcon);
@@ -483,7 +483,7 @@ function displayStudents(student) {
 
   if (student.bloodStatus == "Pure-blood") {
     const purebloodIcon = document.createElement(`img`);
-    purebloodIcon.src = "/assets/ui_elements/pure-blood.png";
+    purebloodIcon.src = "assets/ui_elements/pure-blood.png";
     purebloodIcon.classList.add(`student-card-blood-status`);
     purebloodIcon.title = "Pure-blood";
     secondIcon = purebloodIcon.cloneNode(true);
@@ -492,7 +492,7 @@ function displayStudents(student) {
   }
   if (student.bloodStatus == "Half-blood") {
     const halfbloodIcon = document.createElement(`img`);
-    halfbloodIcon.src = "/assets/ui_elements/half-blood.png";
+    halfbloodIcon.src = "assets/ui_elements/half-blood.png";
     halfbloodIcon.classList.add(`student-card-blood-status`);
     halfbloodIcon.title = "Half-blood";
     secondIcon = halfbloodIcon.cloneNode(true);
@@ -501,7 +501,7 @@ function displayStudents(student) {
   }
   if (student.bloodStatus == "Muggle") {
     const muggleIcon = document.createElement(`img`);
-    muggleIcon.src = "/assets/ui_elements/muggle.png";
+    muggleIcon.src = "assets/ui_elements/muggle.png";
     muggleIcon.classList.add(`student-card-blood-status`);
     muggleIcon.title = "Muggle";
     secondIcon = muggleIcon.cloneNode(true);
@@ -519,7 +519,7 @@ function displayStudents(student) {
   // house crest
   clone.querySelector(
     ".student-details-house-crest"
-  ).src = `/assets/house_crests/${student.studentHouse}.png`;
+  ).src = `assets/house_crests/${student.studentHouse}.png`;
   clone.querySelector(
     ".student-details-house-crest"
   ).alt = `${student.studentHouse}`;
@@ -572,7 +572,7 @@ function displayStudents(student) {
   // student details
   clone.querySelector(
     ".student-details-img"
-  ).src = `/assets/student_images/${student.studentImage}`;
+  ).src = `assets/student_images/${student.studentImage}`;
   clone.querySelector(".student-details-img").alt = `${student.studentImage}`;
   clone.querySelector(
     ".student-details-first-name"
