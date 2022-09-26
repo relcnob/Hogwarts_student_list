@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", init);
 
 function init() {
   async function dataLoaded() {
-    const result = await loadJSON(bloodJson, handleBlood);
+    await loadJSON(bloodJson, handleBlood);
     loadJSON(jsonList, handleData);
   }
   dataLoaded();
