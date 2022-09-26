@@ -19,14 +19,17 @@ let searchEnabled;
 let hackerMode = 0;
 // init function on DOMContentLoaded
 document.addEventListener("DOMContentLoaded", init);
+
 function init() {
   loadJSON(bloodJson, handleBlood);
   loadJSON(jsonList, handleData);
+  // Event listeners
   document.querySelector("#sort").addEventListener("change", handleSort);
   document.querySelector("#filter").addEventListener("change", handleFilter);
   document
     .querySelector("#searchBar")
     .addEventListener("input", searchStudents);
+  // reset view
   document.querySelector("#showAllButton").addEventListener("click", () => {
     searchTerm = false;
     activeArray = studentArray;
@@ -35,6 +38,8 @@ function init() {
     document.querySelector("#searchBar").value = "";
     showStudents(activeArray);
   });
+  // hacking mode
+  document.addEventListener("keydown", handleHack);
 }
 
 function loadJSON(url, callback) {
@@ -91,7 +96,7 @@ function splitData(student) {
   }
   // create student Object
   const studentObj = {
-    fistName: "",
+    firstName: "",
     lastName: "",
     middleName: "",
     nickName: "",
@@ -133,7 +138,7 @@ function findDuplicateLastNames() {
 function addImageLinks(student) {
   // check for duplicate lastnames or missing lastnames
   if (duplicateLastNameArr.includes(student.lastName)) {
-    // if there is multiple students with the same last name, should probably check if first letter of first name is matching TODO (?)
+    // if there is multiple students with the same last name, should probably check if first letter of first name is matching TODO
     student.studentImage =
       student.lastName.toLowerCase() +
       "_" +
@@ -212,10 +217,23 @@ function filterByProperty(value, property) {
     } else return false;
   }
   console.log(`filtering: ${filterProperty} = ${filterValue}`);
-  if (document.querySelector("#searchBar").value !== "") {
+  // check which array to filter
+  if (
+    document.querySelector("#searchBar").value !== "" &&
+    filterProperty !== "isExpelled"
+  ) {
     activeArray = searchArray.filter(isValue);
     showBlueMessage("Filtering search results");
-  } else if (filterProperty == "isExpelled" && filterValue == "1") {
+  } else if (
+    filterProperty == "isExpelled" &&
+    document.querySelector("#searchBar").value !== ""
+  ) {
+    activeArray = activeArray.filter(isValue);
+    showBlueMessage("Filtering search results");
+  } else if (
+    filterProperty == "isExpelled" &&
+    document.querySelector("#searchBar").value == ""
+  ) {
     activeArray = expelledArray;
     showBlueMessage("Showing expelled students");
   } else if (filterProperty == "default") {
@@ -241,6 +259,7 @@ function filterByProperty(value, property) {
 }
 
 function sortByProperty(property, dir) {
+  let sortDirection;
   if (property !== "default") {
     if (dir == "asc") {
       sortDirection = 1;
@@ -258,6 +277,7 @@ function sortByProperty(property, dir) {
       }
     }
   }
+  // notification
   let notifText = property.split(/(?=[A-Z])/);
   let direction;
   if (dir == "asc") {
@@ -276,7 +296,6 @@ function sortByProperty(property, dir) {
       )} - ${direction}`
     );
   }
-
   showStudents(activeArray.sort(sortStudents));
 }
 
@@ -287,12 +306,13 @@ function handleSort() {
 }
 
 function handleFilter() {
+  // get value and property for filtering
   let options = event.target.value.split(" ");
   filterByProperty(options[1], options[0]);
 }
 
 function searchStudents() {
-  searchTerm = document.querySelector("#searchBar").value;
+  searchTerm = document.querySelector("#searchBar").value.toLowerCase();
   searchEnabled = true;
   searchArray = studentArray.filter(isTerm);
 
@@ -303,16 +323,28 @@ function searchStudents() {
       fullName = `${firstName} ${lastName}`;
     }
     if (lastName == undefined && firstName.toLowerCase().includes(searchTerm)) {
+      // in case last name is undefined
       return true;
     } else if (
       firstName.toLowerCase().includes(searchTerm) ||
       lastName.toLowerCase().includes(searchTerm) ||
       fullName.toLowerCase().includes(searchTerm)
     ) {
+      // check first name, last name and combination of both
       return true;
     } else return false;
   }
-  if (document.querySelector("#filter").value !== "default") {
+  console.log(searchTerm);
+
+  if (document.querySelector("#filter").value == "isExpelled 1") {
+    console.log("searching expelled");
+    activeArray = expelledArray.concat(studentArray).filter(isTerm);
+    console.log(activeArray);
+    let options = document.querySelector("#filter").value.split(" ");
+    console.log("options", options);
+    filterByProperty(options[1], options[0]);
+  } else if (document.querySelector("#filter").value !== "default") {
+    // in case search is active, filter it
     activeArray = searchArray;
     let options = document.querySelector("#filter").value.split(" ");
     filterByProperty(options[1], options[0]);
@@ -321,7 +353,8 @@ function searchStudents() {
   }
 }
 
-function updateAbout(array) {
+function updateAbout() {
+  // update about section
   console.log("Updating About...");
   document.querySelector("#total-count").textContent =
     "All Students: " + studentArray.concat(expelledArray).length;
@@ -441,6 +474,7 @@ function displayStudents(student) {
     detailsIconWrapper.appendChild(secondIcon);
   }
   // blood icons
+
   if (student.bloodStatus == "Pure-blood") {
     const purebloodIcon = document.createElement(`img`);
     purebloodIcon.src = "assets/ui_elements/pure-blood.png";
@@ -566,11 +600,7 @@ function displayStudents(student) {
   clone.querySelector(
     ".student-details-blood-status"
   ).textContent = `Blood Status: ${student.bloodStatus}`;
-
-  // TODO
-  // Prefect
-  // Inquisition
-  // expelled
+  // admin panel event listeners
   clone
     .querySelector(".admin-add-prefect")
     .addEventListener("click", addAsPrefect);
@@ -602,7 +632,7 @@ function hideStudentDetails() {
   const studentDetails = this.parentElement.parentElement.parentElement;
   studentDetails.classList.remove("show-student-details");
 }
-// ADMIN PANEL
+// ADMIN PANEL functions
 
 function addAsPrefect() {
   const parent = this.parentElement.parentElement;
@@ -613,19 +643,22 @@ function addAsPrefect() {
   const lastNameField = parent
     .querySelector(".student-details-last-name")
     .textContent.split(" ")[2];
+
+  // lastNameField == "Missing" // leanne or other missing lastnames
   studentArray.filter((student) => {
     if (
-      student.firstName == firstNameField &&
-      student.lastName == lastNameField
+      (student.firstName == firstNameField &&
+        student.lastName == lastNameField) ||
+      (student.firstName == firstNameField && lastNameField == "Missing")
     ) {
       let prefectCount = prefectArray.filter(
         (prefect) => prefect.studentHouse == student.studentHouse
-      ).length;
-      let prefectGender = prefectArray.filter(
+      );
+      let prefectGender = prefectCount.filter(
         (prefect) => prefect.studentGender == student.studentGender
       ).length;
-      console.log(`Current Prefects: ${prefectCount}`);
-      if (prefectCount < "2" && prefectGender < "1") {
+      console.log(`Current Prefects: ${prefectCount.length}`);
+      if (prefectCount.length < "2" && prefectGender < "1") {
         student.isPrefect = 1;
         prefectArray.push(student);
         showGreenMessage("Student added as Prefect");
@@ -650,35 +683,36 @@ function addAsInquisitor() {
     .textContent.split(" ")[2];
   studentArray.filter((student) => {
     if (
-      student.firstName == firstNameField &&
-      student.lastName == lastNameField
+      (student.firstName == firstNameField &&
+        student.lastName == lastNameField) ||
+      (student.firstName == firstNameField && lastNameField == "Missing")
     ) {
+      // check if inquisition requirements are met
       if (
-        student.bloodStatus == "Pure-blood" &&
-        student.studentHouse == "Slytherin"
+        student.bloodStatus == "Pure-blood" ||
+        (student.studentHouse == "Slytherin" && student.isInquisition !== 1)
       ) {
         student.isInquisition = 1;
         showGreenMessage("Student added to Inquisitorial Squad");
         inquisitionArray.push(student);
       } else if (
-        student.bloodStatus == "Pure-blood" &&
-        student.studentHouse !== "Slytherin"
-      ) {
-        showRedMessage("Only Slytherin students can join Inquisitorial Squad");
-      } else if (
-        student.bloodStatus !== "Pure-blood" &&
-        student.studentHouse == "Slytherin"
-      ) {
-        showRedMessage(
-          "Only Pure-blooded students can join Inquisitorial Squad"
-        );
-      } else if (
         student.bloodStatus !== "Pure-blood" &&
         student.studentHouse !== "Slytherin"
       ) {
         showRedMessage(
-          "Only Pure-blooded Slytherin students can join Inquisitorial Squad"
+          "Only Pure-blooded or Slytherin students can join Inquisitorial Squad"
         );
+      }
+      if (
+        hackerMode == 1 &&
+        (student.studentHouse == "Slytherin" || student.isInquisition == 1)
+      ) {
+        // remove inquisitor status after some time
+        setTimeout(() => {
+          student.isInquisition = 0;
+          showRedMessage("Nice try");
+          showStudents(activeArray);
+        }, 4000);
       }
     }
   });
@@ -698,8 +732,9 @@ function removePrefect() {
     .textContent.split(" ")[2];
   studentArray.filter((student) => {
     if (
-      student.firstName == firstNameField &&
-      student.lastName == lastNameField
+      (student.firstName == firstNameField &&
+        student.lastName == lastNameField) ||
+      (student.firstName == firstNameField && lastNameField == "Missing")
     ) {
       student.isPrefect = 0;
       let prefectIndex = prefectArray.indexOf(student);
@@ -722,9 +757,12 @@ function removeInquisitor() {
     .textContent.split(" ")[2];
   studentArray.filter((student) => {
     if (
-      student.firstName == firstNameField &&
-      student.lastName == lastNameField &&
-      student.isInquisition == 1
+      (student.firstName == firstNameField &&
+        student.lastName == lastNameField &&
+        student.isInquisition == 1) ||
+      (student.firstName == firstNameField &&
+        lastNameField == "Missing" &&
+        student.isInquisition == 1)
     ) {
       student.isInquisition = 0;
       let inquisitionIndex = inquisitionArray.indexOf(student);
@@ -752,12 +790,17 @@ function expelStudent() {
     .querySelector(".student-details-last-name")
     .textContent.split(" ")[2];
 
-  // maybe use findindex
   studentArray.filter((student) => {
-    if (
-      student.firstName == firstNameField &&
-      student.lastName == lastNameField &&
-      student.isExpelled !== 1
+    if (student.firstName == "Fryderyk" && hackerMode == 1) {
+      showBlueMessage("Nice try");
+      showGreenMessage("Nice try");
+    } else if (
+      (student.firstName == firstNameField &&
+        student.lastName == lastNameField &&
+        student.isExpelled !== 1) ||
+      (student.firstName == firstNameField &&
+        lastNameField == "Missing" &&
+        student.isExpelled !== 1)
     ) {
       student.isExpelled = 1;
       student.isInquisition = 0;
@@ -783,6 +826,7 @@ function expelStudent() {
   }, 1000);
 }
 
+// notification functions
 function showRedMessage(text) {
   redNotif = document.querySelector(".notification-red");
   redNotif.textContent = text;
@@ -808,4 +852,93 @@ function showBlueMessage(text) {
   setTimeout(() => {
     blueNotif.classList.remove("show-notification");
   }, 4000);
+}
+
+function handleHack(e) {
+  const searchBar = document.querySelector("#searchBar");
+  if (
+    e.key == "h" &&
+    hackerMode !== 1 &&
+    document.activeElement !== searchBar
+  ) {
+    hackTheSystem();
+  }
+}
+// hacking function
+function hackTheSystem() {
+  if (hackerMode != 1) {
+    console.log("Hacker mode engaged");
+    hackerMode = 1;
+    // hacker overlay
+    document.querySelector(".hacker-overlay").classList.add("showHackOverlay");
+    setTimeout(() => {
+      document.querySelector(".hacker-loader").classList.add("startLoading");
+    }, 500);
+    document
+      .querySelector(".loader-message")
+      .addEventListener("animationend", () => {
+        console.log("finished loading");
+        document
+          .querySelector(".hacker-overlay")
+          .classList.remove("showHackOverlay");
+        insertHacker();
+        document.querySelector("body").classList.add("hacked");
+      });
+
+    // hacker object for insert
+    function insertHacker() {
+      const hackerObj = {
+        firstName: "Fryderyk",
+        lastName: "Boncler",
+        middleName: undefined,
+        nickName: undefined,
+        studentHouse: "Gryffindor",
+        studentGender: "Boy",
+        studentImage: "me.png",
+        bloodStatus: "Pure-blood",
+        isExpelled: "0",
+        isPrefect: "1",
+        isInquisition: "1",
+        bgPosX: "",
+        bgPosY: "",
+      };
+      const hackerObject = Object.create(hackerObj);
+      hackerObject.firstName;
+      hackerObject.lastName;
+      hackerObject.middleName;
+      hackerObject.nickName;
+      hackerObject.studentHouse;
+      hackerObject.studentGender;
+      hackerObject.bloodStatus;
+      hackerObject.isExpelled;
+      hackerObject.isPrefect;
+      hackerObject.isInquisition;
+      hackerObject.bgPosX = Math.floor(Math.random() * 120);
+      hackerObject.bgPosY = Math.floor(Math.random() * 120);
+      // push hacker object into studentArray, unshift so that its first
+      studentArray.unshift(hackerObject);
+      showStudents(activeArray);
+    }
+    // hack the blood status
+    studentArray.forEach((student) => {
+      if (
+        student.bloodStatus == "Pure-blood" &&
+        hackerMode == 1 &&
+        student.firstName !== "Fryderyk"
+      ) {
+        let newBlood = Math.floor(Math.random() * 2 + 1);
+        if (newBlood == 1) {
+          student.bloodStatus = "Muggle";
+        } else if (newBlood == 2) {
+          student.bloodStatus = "Half-blood";
+        }
+      } else if (student.bloodStatus !== "Pure-blood" && hackerMode == 1) {
+        student.bloodStatus = "Pure-blood";
+        console.log(student.bloodStatus);
+      }
+    });
+  } else {
+    // in case somebody tries to activate it twice
+    console.log("Hacking already enabled");
+  }
 }
