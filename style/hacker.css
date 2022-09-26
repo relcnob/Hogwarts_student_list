@@ -8,7 +8,7 @@ body.hacked img {
 }
 
 .hacked {
-  background-image: url(/assets/textures/axiom-pattern.png) !important;
+  background-image: url(../assets/textures/axiom-pattern.png) !important;
   background-color: #000 !important;
   color: #fff;
 }
@@ -136,7 +136,7 @@ body.hacked * {
 }
 
 .hacked .student-card {
-  background: url(/assets/textures/graphy-dark.png);
+  background: url(../assets/textures/graphy-dark.png);
   background-position-x: 0px !important;
   background-position-y: 0px !important;
   border: solid 1px #fff;
@@ -146,7 +146,7 @@ body.hacked * {
 }
 
 .hacked .student-details {
-  background: url(/assets/textures/graphy-dark.png);
+  background: url(../assets/textures/graphy-dark.png);
   border: solid 1px #fff;
   background-color: #000;
   color: #fff;
@@ -157,7 +157,7 @@ body.hacked * {
 }
 
 .hacked #about-panel {
-  background: url(/assets/textures/graphy-dark.png);
+  background: url(../assets/textures/graphy-dark.png);
   border: solid 1px #000;
   overflow: hidden;
   background-color: #000;
