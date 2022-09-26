@@ -167,22 +167,22 @@ function addImageLinks(student) {
     student.studentImage = student.firstName.toLowerCase() + ".png";
   }
   // function in case image is missing from image folder - replaces with imagemissing.png
-  function checkFileExist(urlToFile) {
-    let xhr = new XMLHttpRequest();
-    xhr.open("HEAD", urlToFile, false);
-    xhr.send();
-    if (xhr.status == "404") {
-      console.log(`Image missing ... Replacing with default filepath`);
-      return false;
-    } else {
-      return true;
-    }
-  }
-  let result = checkFileExist(`/assets/student_images/${student.studentImage}`);
-  if (!result) {
-    student.studentImage = "imagemissing.png";
-  }
-}
+//   function checkFileExist(urlToFile) {
+//     let xhr = new XMLHttpRequest();
+//     xhr.open("HEAD", urlToFile, false);
+//     xhr.send();
+//     if (xhr.status == "404") {
+//       console.log(`Image missing ... Replacing with default filepath`);
+//       return false;
+//     } else {
+//       return true;
+//     }
+//   }
+//   let result = checkFileExist(`/assets/student_images/${student.studentImage}`);
+//   if (!result) {
+//     student.studentImage = "imagemissing.png";
+//   }
+// }
 
 // Returns capitalized String, including multiple word strings and ones with
 function capitalize(str) {
