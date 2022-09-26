@@ -25,6 +25,7 @@ function init() {
     await loadJSON(bloodJson, handleBlood);
     loadJSON(jsonList, handleData);
   }
+
   dataLoaded();
 
   // Event listeners
@@ -47,7 +48,7 @@ function init() {
 }
 
 function loadJSON(url, callback) {
-  fetch(url)
+  return fetch(url)
     .then((response) => response.json())
     .then((jsonData) => callback(jsonData));
 }
