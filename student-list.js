@@ -138,7 +138,7 @@ function findDuplicateLastNames() {
 function addImageLinks(student) {
   // check for duplicate lastnames or missing lastnames
   if (duplicateLastNameArr.includes(student.lastName)) {
-    // if there is multiple students with the same last name, should probably check if first letter of first name is matching TODO (?)
+    // if there is multiple students with the same last name, should probably check if first letter of first name is matching TODO
     student.studentImage =
       student.lastName.toLowerCase() +
       "_" +
@@ -218,10 +218,22 @@ function filterByProperty(value, property) {
   }
   console.log(`filtering: ${filterProperty} = ${filterValue}`);
   // check which array to filter
-  if (document.querySelector("#searchBar").value !== "") {
+  if (
+    document.querySelector("#searchBar").value !== "" &&
+    filterProperty !== "isExpelled"
+  ) {
     activeArray = searchArray.filter(isValue);
     showBlueMessage("Filtering search results");
-  } else if (filterProperty == "isExpelled" && filterValue == "1") {
+  } else if (
+    filterProperty == "isExpelled" &&
+    document.querySelector("#searchBar").value !== ""
+  ) {
+    activeArray = activeArray.filter(isValue);
+    showBlueMessage("Filtering search results");
+  } else if (
+    filterProperty == "isExpelled" &&
+    document.querySelector("#searchBar").value == ""
+  ) {
     activeArray = expelledArray;
     showBlueMessage("Showing expelled students");
   } else if (filterProperty == "default") {
@@ -284,7 +296,6 @@ function sortByProperty(property, dir) {
       )} - ${direction}`
     );
   }
-
   showStudents(activeArray.sort(sortStudents));
 }
 
@@ -301,7 +312,7 @@ function handleFilter() {
 }
 
 function searchStudents() {
-  searchTerm = document.querySelector("#searchBar").value;
+  searchTerm = document.querySelector("#searchBar").value.toLowerCase();
   searchEnabled = true;
   searchArray = studentArray.filter(isTerm);
 
@@ -323,7 +334,16 @@ function searchStudents() {
       return true;
     } else return false;
   }
-  if (document.querySelector("#filter").value !== "default") {
+  console.log(searchTerm);
+
+  if (document.querySelector("#filter").value == "isExpelled 1") {
+    console.log("searching expelled");
+    activeArray = expelledArray.concat(studentArray).filter(isTerm);
+    console.log(activeArray);
+    let options = document.querySelector("#filter").value.split(" ");
+    console.log("options", options);
+    filterByProperty(options[1], options[0]);
+  } else if (document.querySelector("#filter").value !== "default") {
     // in case search is active, filter it
     activeArray = searchArray;
     let options = document.querySelector("#filter").value.split(" ");
@@ -333,7 +353,7 @@ function searchStudents() {
   }
 }
 
-function updateAbout(array) {
+function updateAbout() {
   // update about section
   console.log("Updating About...");
   document.querySelector("#total-count").textContent =
