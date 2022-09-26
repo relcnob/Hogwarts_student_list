@@ -9,7 +9,8 @@ body.hacked img {
 
 .hacked {
   background-image: url(assets/textures/axiom-pattern.png) !important;
-  background-color: #ececec !important;
+  background-color: #000 !important;
+  color: #fff;
 }
 
 body.hacked * {
@@ -105,7 +106,7 @@ body.hacked * {
     transform: scaleX(1);
     opacity: 1;
   }
-  81% {
+  91% {
     transform: scaleY(1);
     opacity: 1;
   }
@@ -132,4 +133,103 @@ body.hacked * {
     transform: scale(1);
     opacity: 1;
   }
+}
+
+.hacked .student-card {
+  background: url(assets/textures/graphy-dark.png);
+  background-position-x: 0px !important;
+  background-position-y: 0px !important;
+  border: solid 1px #fff;
+  background-color: #000;
+  color: #fff;
+  box-shadow: 0px 0px 4px 2px var(--hackerGreen);
+}
+
+.hacked .student-details {
+  background: url(assets/textures/graphy-dark.png);
+  border: solid 1px #fff;
+  background-color: #000;
+  color: #fff;
+}
+
+.hacked .student-card-name {
+  color: #fff;
+}
+
+.hacked #about-panel {
+  background: url(assets/textures/graphy-dark.png);
+  border: solid 1px #000;
+  overflow: hidden;
+  background-color: #000;
+  color: #fff;
+  transition: 0.5s cubic-bezier(0.39, -0.55, 0.47, 1.5);
+}
+
+.hacked #about-panel:hover {
+  transform: scale(0.8);
+}
+
+.hacked #about-panel:before,
+.hacked #about-panel:after {
+  background-image: none;
+  background-color: var(--hackerGreen);
+  box-shadow: 0px 0px 10px var(--hackerGreen);
+  opacity: 1;
+  height: 4px;
+  width: 50%;
+  margin: auto;
+}
+
+.hacked .student-card-details-button,
+.hacked #showAllButton,
+.hacked .student-details-admin button,
+.hacked .student-details-admin button:active,
+.hacked .student-details-admin button:hover {
+  background-color: var(--hackerGreen);
+  color: #000;
+  border: solid 1px #000;
+}
+
+.hacked .student-card:before {
+  background-image: none;
+  content: "😂";
+  top: 10px;
+  font-size: 1.5rem;
+}
+
+.hacked .student-card-house-image {
+  filter: blur(3px);
+}
+
+.hacked header h1 {
+  animation: shake 0.4s;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+  transform-origin: left;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(-10px) rotate(1deg) scale(0.9);
+  }
+  100% {
+    transform: translateX(10px) rotate(-1deg) scale(1.1);
+  }
+}
+
+.hacked #sort,
+.hacked #filter,
+.hacked #searchBar {
+  color: #fff;
+  border: solid 1px #fff;
+}
+
+.hacked #sort option,
+.hacked #filter option {
+  color: #000;
+}
+
+.hacked .student-details-text,
+.hacked .student-details-icons {
+  border: solid 1px #fff;
 }

@@ -217,6 +217,7 @@ function filterByProperty(value, property) {
     } else return false;
   }
   console.log(`filtering: ${filterProperty} = ${filterValue}`);
+  // check which array to filter
   if (document.querySelector("#searchBar").value !== "") {
     activeArray = searchArray.filter(isValue);
     showBlueMessage("Filtering search results");
@@ -246,6 +247,7 @@ function filterByProperty(value, property) {
 }
 
 function sortByProperty(property, dir) {
+  let sortDirection;
   if (property !== "default") {
     if (dir == "asc") {
       sortDirection = 1;
@@ -263,6 +265,7 @@ function sortByProperty(property, dir) {
       }
     }
   }
+  // notification
   let notifText = property.split(/(?=[A-Z])/);
   let direction;
   if (dir == "asc") {
@@ -292,6 +295,7 @@ function handleSort() {
 }
 
 function handleFilter() {
+  // get value and property for filtering
   let options = event.target.value.split(" ");
   filterByProperty(options[1], options[0]);
 }
@@ -308,16 +312,19 @@ function searchStudents() {
       fullName = `${firstName} ${lastName}`;
     }
     if (lastName == undefined && firstName.toLowerCase().includes(searchTerm)) {
+      // in case last name is undefined
       return true;
     } else if (
       firstName.toLowerCase().includes(searchTerm) ||
       lastName.toLowerCase().includes(searchTerm) ||
       fullName.toLowerCase().includes(searchTerm)
     ) {
+      // check first name, last name and combination of both
       return true;
     } else return false;
   }
   if (document.querySelector("#filter").value !== "default") {
+    // in case search is active, filter it
     activeArray = searchArray;
     let options = document.querySelector("#filter").value.split(" ");
     filterByProperty(options[1], options[0]);
@@ -327,6 +334,7 @@ function searchStudents() {
 }
 
 function updateAbout(array) {
+  // update about section
   console.log("Updating About...");
   document.querySelector("#total-count").textContent =
     "All Students: " + studentArray.concat(expelledArray).length;
@@ -572,11 +580,7 @@ function displayStudents(student) {
   clone.querySelector(
     ".student-details-blood-status"
   ).textContent = `Blood Status: ${student.bloodStatus}`;
-
-  // TODO
-  // Prefect
-  // Inquisition
-  // expelled
+  // admin panel event listeners
   clone
     .querySelector(".admin-add-prefect")
     .addEventListener("click", addAsPrefect);
@@ -608,7 +612,7 @@ function hideStudentDetails() {
   const studentDetails = this.parentElement.parentElement.parentElement;
   studentDetails.classList.remove("show-student-details");
 }
-// ADMIN PANEL
+// ADMIN PANEL functions
 
 function addAsPrefect() {
   const parent = this.parentElement.parentElement;
@@ -619,19 +623,22 @@ function addAsPrefect() {
   const lastNameField = parent
     .querySelector(".student-details-last-name")
     .textContent.split(" ")[2];
+
+  // lastNameField == "Missing" // leanne or other missing lastnames
   studentArray.filter((student) => {
     if (
-      student.firstName == firstNameField &&
-      student.lastName == lastNameField
+      (student.firstName == firstNameField &&
+        student.lastName == lastNameField) ||
+      (student.firstName == firstNameField && lastNameField == "Missing")
     ) {
       let prefectCount = prefectArray.filter(
         (prefect) => prefect.studentHouse == student.studentHouse
-      ).length;
-      let prefectGender = prefectArray.filter(
+      );
+      let prefectGender = prefectCount.filter(
         (prefect) => prefect.studentGender == student.studentGender
       ).length;
-      console.log(`Current Prefects: ${prefectCount}`);
-      if (prefectCount < "2" && prefectGender < "1") {
+      console.log(`Current Prefects: ${prefectCount.length}`);
+      if (prefectCount.length < "2" && prefectGender < "1") {
         student.isPrefect = 1;
         prefectArray.push(student);
         showGreenMessage("Student added as Prefect");
@@ -656,42 +663,31 @@ function addAsInquisitor() {
     .textContent.split(" ")[2];
   studentArray.filter((student) => {
     if (
-      student.firstName == firstNameField &&
-      student.lastName == lastNameField
+      (student.firstName == firstNameField &&
+        student.lastName == lastNameField) ||
+      (student.firstName == firstNameField && lastNameField == "Missing")
     ) {
+      // check if inquisition requirements are met
       if (
-        student.bloodStatus == "Pure-blood" &&
-        student.studentHouse == "Slytherin" &&
-        student.isInquisition !== 1
+        student.bloodStatus == "Pure-blood" ||
+        (student.studentHouse == "Slytherin" && student.isInquisition !== 1)
       ) {
         student.isInquisition = 1;
         showGreenMessage("Student added to Inquisitorial Squad");
         inquisitionArray.push(student);
       } else if (
-        student.bloodStatus == "Pure-blood" &&
-        student.studentHouse !== "Slytherin"
-      ) {
-        showRedMessage("Only Slytherin students can join Inquisitorial Squad");
-      } else if (
-        student.bloodStatus !== "Pure-blood" &&
-        student.studentHouse == "Slytherin"
-      ) {
-        showRedMessage(
-          "Only Pure-blooded students can join Inquisitorial Squad"
-        );
-      } else if (
         student.bloodStatus !== "Pure-blood" &&
         student.studentHouse !== "Slytherin"
       ) {
         showRedMessage(
-          "Only Pure-blooded Slytherin students can join Inquisitorial Squad"
+          "Only Pure-blooded or Slytherin students can join Inquisitorial Squad"
         );
       }
       if (
         hackerMode == 1 &&
-        student.studentHouse == "Slytherin" &&
-        student.isInquisition == 1
+        (student.studentHouse == "Slytherin" || student.isInquisition == 1)
       ) {
+        // remove inquisitor status after some time
         setTimeout(() => {
           student.isInquisition = 0;
           showRedMessage("Nice try");
@@ -716,8 +712,9 @@ function removePrefect() {
     .textContent.split(" ")[2];
   studentArray.filter((student) => {
     if (
-      student.firstName == firstNameField &&
-      student.lastName == lastNameField
+      (student.firstName == firstNameField &&
+        student.lastName == lastNameField) ||
+      (student.firstName == firstNameField && lastNameField == "Missing")
     ) {
       student.isPrefect = 0;
       let prefectIndex = prefectArray.indexOf(student);
@@ -740,9 +737,12 @@ function removeInquisitor() {
     .textContent.split(" ")[2];
   studentArray.filter((student) => {
     if (
-      student.firstName == firstNameField &&
-      student.lastName == lastNameField &&
-      student.isInquisition == 1
+      (student.firstName == firstNameField &&
+        student.lastName == lastNameField &&
+        student.isInquisition == 1) ||
+      (student.firstName == firstNameField &&
+        lastNameField == "Missing" &&
+        student.isInquisition == 1)
     ) {
       student.isInquisition = 0;
       let inquisitionIndex = inquisitionArray.indexOf(student);
@@ -775,9 +775,12 @@ function expelStudent() {
       showBlueMessage("Nice try");
       showGreenMessage("Nice try");
     } else if (
-      student.firstName == firstNameField &&
-      student.lastName == lastNameField &&
-      student.isExpelled !== 1
+      (student.firstName == firstNameField &&
+        student.lastName == lastNameField &&
+        student.isExpelled !== 1) ||
+      (student.firstName == firstNameField &&
+        lastNameField == "Missing" &&
+        student.isExpelled !== 1)
     ) {
       student.isExpelled = 1;
       student.isInquisition = 0;
@@ -803,6 +806,7 @@ function expelStudent() {
   }, 1000);
 }
 
+// notification functions
 function showRedMessage(text) {
   redNotif = document.querySelector(".notification-red");
   redNotif.textContent = text;
@@ -831,11 +835,16 @@ function showBlueMessage(text) {
 }
 
 function handleHack(e) {
-  if (e.key == "h" && hackerMode !== 1) {
+  const searchBar = document.querySelector("#searchBar");
+  if (
+    e.key == "h" &&
+    hackerMode !== 1 &&
+    document.activeElement !== searchBar
+  ) {
     hackTheSystem();
   }
 }
-
+// hacking function
 function hackTheSystem() {
   if (hackerMode != 1) {
     console.log("Hacker mode engaged");
@@ -886,10 +895,11 @@ function hackTheSystem() {
       hackerObject.isInquisition;
       hackerObject.bgPosX = Math.floor(Math.random() * 120);
       hackerObject.bgPosY = Math.floor(Math.random() * 120);
-      // push student object into studentArray
+      // push hacker object into studentArray, unshift so that its first
       studentArray.unshift(hackerObject);
       showStudents(activeArray);
     }
+    // hack the blood status
     studentArray.forEach((student) => {
       if (
         student.bloodStatus == "Pure-blood" &&
@@ -908,6 +918,7 @@ function hackTheSystem() {
       }
     });
   } else {
+    // in case somebody tries to activate it twice
     console.log("Hacking already enabled");
   }
 }
