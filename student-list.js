@@ -21,8 +21,14 @@ let hackerMode = 0;
 document.addEventListener("DOMContentLoaded", init);
 
 function init() {
-  loadJSON(bloodJson, handleBlood);
-  loadJSON(jsonList, handleData);
+  jsonLoader();
+
+  async function jsonLoader() {
+    loadJSON(bloodJson, handleBlood);
+    await loadJSON(jsonList, handleData);
+    console.log("both JSON files loaded");
+  }
+
   // Event listeners
   document.querySelector("#sort").addEventListener("change", handleSort);
   document.querySelector("#filter").addEventListener("change", handleFilter);
