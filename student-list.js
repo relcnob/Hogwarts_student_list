@@ -262,10 +262,10 @@ function sortByProperty(property, dir) {
     function sortStudents(studentA, studentB) {
       if (studentA[sortProperty] == undefined) {
         // leanne
-        return 1;
+        return 1 * sortDirection;
       } else if (studentB[sortProperty] == undefined) {
         // leanne
-        return -1;
+        return -1 * sortDirection;
       } else if (studentA[sortProperty] < studentB[sortProperty]) {
         return -1 * sortDirection;
       } else {
