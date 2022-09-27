@@ -47,7 +47,7 @@ function init() {
   document.addEventListener("keydown", handleHack);
 }
 
-function loadJSON(url, callback) {
+async function loadJSON(url, callback) {
   return fetch(url)
     .then((response) => response.json())
     .then((jsonData) => callback(jsonData));
@@ -221,7 +221,8 @@ function filterByProperty(value, property) {
     showBlueMessage("Filtering search results");
   } else if (
     filterProperty == "isExpelled" &&
-    document.querySelector("#searchBar").value == ""
+    document.querySelector("#searchBar").value == "" &&
+    filterValue == 1
   ) {
     activeArray = expelledArray;
     showBlueMessage("Showing expelled students");
@@ -259,7 +260,13 @@ function sortByProperty(property, dir) {
     console.log(`sorting: ${sortProperty}, ${sortDirection}`);
 
     function sortStudents(studentA, studentB) {
-      if (studentA[sortProperty] < studentB[sortProperty]) {
+      if (studentA[sortProperty] == undefined) {
+        // leanne
+        return 1;
+      } else if (studentB[sortProperty] == undefined) {
+        // leanne
+        return -1;
+      } else if (studentA[sortProperty] < studentB[sortProperty]) {
         return -1 * sortDirection;
       } else {
         return 1 * sortDirection;
@@ -285,7 +292,8 @@ function sortByProperty(property, dir) {
       )} - ${direction}`
     );
   }
-  showStudents(activeArray.sort(sortStudents));
+  activeArray = activeArray.sort(sortStudents);
+  showStudents(activeArray);
 }
 
 function handleSort() {
@@ -637,8 +645,11 @@ function addAsPrefect() {
   studentArray.filter((student) => {
     if (
       (student.firstName == firstNameField &&
-        student.lastName == lastNameField) ||
-      (student.firstName == firstNameField && lastNameField == "Missing")
+        student.lastName == lastNameField &&
+        student.isPrefect == 0) ||
+      (student.firstName == firstNameField &&
+        lastNameField == "Missing" &&
+        student.isPrefect == 0)
     ) {
       let prefectCount = prefectArray.filter(
         (prefect) => prefect.studentHouse == student.studentHouse
@@ -804,7 +815,6 @@ function expelStudent() {
       showRedMessage("Student Expelled");
     }
   });
-  // check if removed student isnt fitting
   let filterValues = document.querySelector("#filter").value.split(" ");
   if (filterValues[0] !== "default") {
     filterByProperty(filterValues[1], filterValues[0]);
