@@ -848,8 +848,8 @@ function expelStudent() {
       prefectArray.splice(prefectIndex, 1);
       inquisitionArray.splice(inquisitionIndex, 1);
       showRedMessage("Student Expelled");
-    } else {
-      showRedMessage("Student alreadt Expelled");
+    } else if (firstNameField !== "Fryderyk") {
+      showRedMessage("Student already Expelled");
     }
   });
   let filterValues = document.querySelector("#filter").value.split(" ");
