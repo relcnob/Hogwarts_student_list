@@ -193,7 +193,7 @@ footer {
 }
 #about-panel {
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 2fr 1fr;
   gap: 0.5rem;
   margin-bottom: 1rem;
   background-image: url(../assets/textures/clean-gray-paper.png);
@@ -557,7 +557,7 @@ footer {
   #student-list-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 5rem;
+    gap: 3rem;
     position: relative;
   }
   #student-list-wrapper aside {
@@ -661,5 +661,8 @@ footer {
 
   #about-panel {
     padding: 3rem;
+  }
+  #student-list-wrapper {
+    gap: 5rem;
   }
 }
