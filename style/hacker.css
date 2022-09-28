@@ -4,7 +4,7 @@
   --hackerGreen: #61ff61;
 }
 body.hacked img {
-  transform: rotate(13deg) skew(15deg, 0);
+  transform: rotate(13deg) skew(5deg, 0);
 }
 
 .hacked {
@@ -139,7 +139,7 @@ body.hacked * {
   background: url(../assets/textures/graphy-dark.png);
   background-position-x: 0px !important;
   background-position-y: 0px !important;
-  border: solid 1px #fff;
+  border: solid 1px #8aff8a;
   background-color: #000;
   color: #fff;
   box-shadow: 0px 0px 4px 2px var(--hackerGreen);
@@ -166,7 +166,21 @@ body.hacked * {
 }
 
 .hacked #about-panel:hover {
-  transform: scale(0.8);
+  animation: 0.5s wiggle;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+  100% {
+    transform: rotate(-3deg);
+  }
 }
 
 .hacked #about-panel:before,
@@ -210,10 +224,10 @@ body.hacked * {
 
 @keyframes shake {
   0% {
-    transform: translateX(-10px) rotate(1deg) scale(0.9);
+    transform: translateX(-1%) scaleY(0.9) scaleX(1.1);
   }
   100% {
-    transform: translateX(10px) rotate(-1deg) scale(1.1);
+    transform: translateX(1%) scaleY(1.1) scaleX(0.9);
   }
 }
 
@@ -232,4 +246,9 @@ body.hacked * {
 .hacked .student-details-text,
 .hacked .student-details-icons {
   border: solid 1px #fff;
+}
+
+.hacked footer {
+  border-top: double 4px #8aff8a;
+  box-shadow: 0px 0px 12px #61ff61;
 }

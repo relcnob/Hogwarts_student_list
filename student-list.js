@@ -665,6 +665,15 @@ function addAsPrefect() {
       } else {
         showRedMessage(`Too many prefects in ${student.studentHouse}`);
       }
+    } else if (
+      (student.firstName == firstNameField &&
+        student.lastName == lastNameField &&
+        student.isPrefect == 1) ||
+      (student.firstName == firstNameField &&
+        lastNameField == "Missing" &&
+        student.isPrefect == 1)
+    ) {
+      showRedMessage("Student is already a Prefect");
     }
   });
   setTimeout(() => {
@@ -684,8 +693,11 @@ function addAsInquisitor() {
   studentArray.filter((student) => {
     if (
       (student.firstName == firstNameField &&
-        student.lastName == lastNameField) ||
-      (student.firstName == firstNameField && lastNameField == "Missing")
+        student.lastName == lastNameField &&
+        student.isInquisition == 0) ||
+      (student.firstName == firstNameField &&
+        lastNameField == "Missing" &&
+        student.isInquisition == 0)
     ) {
       // check if inquisition requirements are met
       if (
@@ -714,6 +726,15 @@ function addAsInquisitor() {
           showStudents(activeArray);
         }, 4000);
       }
+    } else if (
+      (student.firstName == firstNameField &&
+        student.lastName == lastNameField &&
+        student.isInquisition == 1) ||
+      (student.firstName == firstNameField &&
+        lastNameField == "Missing" &&
+        student.isInquisition == 1)
+    ) {
+      showRedMessage("Student is already a member of the squad");
     }
   });
   setTimeout(() => {
@@ -733,18 +754,23 @@ function removePrefect() {
   studentArray.filter((student) => {
     if (
       (student.firstName == firstNameField &&
-        student.lastName == lastNameField) ||
-      (student.firstName == firstNameField && lastNameField == "Missing")
+        student.lastName == lastNameField &&
+        student.isPrefect == 1) ||
+      (student.firstName == firstNameField &&
+        lastNameField == "Missing" &&
+        student.isPrefect == 1)
     ) {
       student.isPrefect = 0;
       let prefectIndex = prefectArray.indexOf(student);
       prefectArray.splice(prefectIndex, 1);
+      showRedMessage("Prefect Removed");
+    } else {
+      showRedMessage("Student is not a Prefect");
     }
   });
   setTimeout(() => {
     showStudents(activeArray);
   }, 1000);
-  showRedMessage("Prefect Removed");
 }
 function removeInquisitor() {
   const parent = this.parentElement.parentElement;
@@ -768,6 +794,15 @@ function removeInquisitor() {
       let inquisitionIndex = inquisitionArray.indexOf(student);
       inquisitionArray.splice(inquisitionIndex, 1);
       showRedMessage("Student removed from Inquisitorial Squad");
+    } else if (
+      (student.firstName == firstNameField &&
+        student.lastName == lastNameField &&
+        student.isInquisition == 0) ||
+      (student.firstName == firstNameField &&
+        lastNameField == "Missing" &&
+        student.isInquisition == 0)
+    ) {
+      showRedMessage("Student is not an Inquisitor");
     }
   });
   let filterValues = document.querySelector("#filter").value.split(" ");
@@ -813,6 +848,8 @@ function expelStudent() {
       prefectArray.splice(prefectIndex, 1);
       inquisitionArray.splice(inquisitionIndex, 1);
       showRedMessage("Student Expelled");
+    } else {
+      showRedMessage("Student alreadt Expelled");
     }
   });
   let filterValues = document.querySelector("#filter").value.split(" ");

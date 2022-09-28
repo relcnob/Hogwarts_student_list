@@ -58,18 +58,35 @@ footer {
 /* mobile styling */
 
 /* notifications */
+
+.notification-wrapper {
+  position: fixed;
+  top: 5%;
+  left: 0;
+  gap: 1rem;
+  width: 100%;
+  z-index: 50;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .notification-red,
 .notification-blue,
 .notification-green {
-  position: fixed;
-  top: 64px;
-  right: -120%;
+  position: relative;
   padding: 0.75rem 1rem;
-  transition: 1s ease-in-out;
+  transition: 0.3s ease-in-out;
+  transition-delay: 0.1s;
   color: #fff;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.301);
   z-index: 10;
   filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.3));
+  width: fit-content;
+  max-width: 80vw;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .notification-red {
@@ -78,10 +95,11 @@ footer {
   background-size: contain;
   background-repeat: repeat-x;
   z-index: 12;
-  top: 64px;
+  transform: scaleX(0);
 }
 
-.notification-red:before {
+.notification-red:before,
+.notification-red:after {
   content: " ";
   position: absolute;
   top: 0;
@@ -90,6 +108,13 @@ footer {
   aspect-ratio: 1/1;
   background-image: url(../assets/textures/red-notif-ribbon.png);
   background-size: contain;
+  z-index: -1;
+}
+
+.notification-red:after {
+  left: auto;
+  right: -30px;
+  transform: scaleX(-1);
 }
 
 .notification-blue {
@@ -97,10 +122,11 @@ footer {
   background-image: url(../assets/textures/blue-notif-bg.jpg);
   background-size: contain;
   background-repeat: repeat-x;
-  top: 12px;
+  transform: scaleX(0);
 }
 
-.notification-blue:before {
+.notification-blue:before,
+.notification-blue:after {
   content: " ";
   position: absolute;
   top: 0;
@@ -111,14 +137,22 @@ footer {
   background-size: contain;
 }
 
+.notification-blue:after {
+  left: auto;
+  right: -30px;
+  transform: scaleX(-1);
+}
+
 .notification-green {
   background-color: rgb(30, 107, 65);
   background-image: url(../assets/textures/green-notif-bg.jpg);
   background-size: contain;
   background-repeat: repeat-x;
   z-index: 11;
+  transform: scaleX(0);
 }
-.notification-green:before {
+.notification-green:before,
+.notification-green:after {
   content: " ";
   position: absolute;
   top: 0;
@@ -129,8 +163,14 @@ footer {
   background-size: contain;
 }
 
+.notification-green:after {
+  left: auto;
+  right: -30px;
+  transform: scaleX(-1);
+}
+
 .show-notification {
-  right: 0;
+  transform: scaleX(1);
 }
 
 #student-list-wrapper {
@@ -153,7 +193,7 @@ footer {
 }
 #about-panel {
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 2fr 1fr;
   gap: 0.5rem;
   margin-bottom: 1rem;
   background-image: url(../assets/textures/clean-gray-paper.png);
@@ -517,7 +557,7 @@ footer {
   #student-list-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 5rem;
+    gap: 3rem;
     position: relative;
   }
   #student-list-wrapper aside {
@@ -621,5 +661,8 @@ footer {
 
   #about-panel {
     padding: 3rem;
+  }
+  #student-list-wrapper {
+    gap: 5rem;
   }
 }
