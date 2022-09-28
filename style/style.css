@@ -285,6 +285,7 @@ footer {
 .student-card-house-image,
 .student-card-student-image {
   width: 2rem;
+  border-radius: 25%;
 }
 
 #student-list-wrapper aside {
